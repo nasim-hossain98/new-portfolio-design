@@ -1,0 +1,217 @@
+@import "tailwindcss";
+
+/* ---------------------------------------------------------------------------
+   Design tokens — dark editorial palette: ink, steel blue, brass accent
+--------------------------------------------------------------------------- */
+@theme {
+  /* Colors */
+  --color-ink: #0e0e0e;
+  --color-ink-soft: #141414;
+  --color-ink-raised: #1a1a1a;
+  --color-steel: #a7bdda;
+  --color-steel-dim: #6b7b8f;
+  --color-steel-faint: rgba(167, 189, 218, 0.08);
+  --color-brass: #d4c4a8;
+  --color-brass-deep: #4a4a4a;
+
+  /* Typography */
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-serif: "Crimson Pro", Georgia, "Times New Roman", serif;
+
+  /* Motion */
+  --ease-smooth: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-back: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* Layout */
+  --container-page: 75rem;
+  --container-narrow: 62.5rem;
+
+  /* -------------------------------------------------------------------------
+     Cinematic design system
+  ------------------------------------------------------------------------- */
+
+  /* Palette */
+  --color-cinema-black: #0a0a0f;
+  --color-cinema-surface: #12121a;
+  --color-cinema-text: #f0f0f5;
+  --color-cinema-muted: #6b6b7b;
+  --color-cinema-accent: #c8a97e;
+
+  /* Typography — cinematic editorial: Cormorant Garamond display + Inter body */
+  --font-display: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+  --font-body: "Inter", system-ui, sans-serif;
+
+  /* Display sizes — tuned for Cormorant Garamond (reads narrow, size up) */
+  --text-display-xl: clamp(3.5rem, 9vw, 8.5rem);
+  --text-display-xl--line-height: 1.02;
+  --text-display-xl--letter-spacing: -0.01em;
+  --text-display-lg: clamp(2.75rem, 5.5vw, 4.5rem);
+  --text-display-lg--line-height: 1.06;
+  --text-display-lg--letter-spacing: -0.01em;
+  --text-display-md: clamp(1.75rem, 3.2vw, 2.75rem);
+  --text-display-md--line-height: 1.15;
+
+  /* Radii */
+  --radius-card: 16px;
+  --radius-pill: 9999px;
+
+  /* Cinematic easing curves */
+  --ease-cinematic: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --ease-dramatic: cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-snappy: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Animations */
+  --animate-marquee: marquee 25s linear infinite;
+  --animate-marquee-reverse: marquee-reverse 25s linear infinite;
+  --animate-pulse-glow: pulse-glow 2s ease-in-out infinite;
+  --animate-gradient-shift: gradient-shift 20s ease-in-out infinite;
+  --animate-draw-line: draw-line 1.5s ease-out forwards;
+
+  @keyframes marquee {
+    0% { transform: translateX(0%); }
+    100% { transform: translateX(-50%); }
+  }
+  @keyframes marquee-reverse {
+    0% { transform: translateX(-50%); }
+    100% { transform: translateX(0%); }
+  }
+  @keyframes pulse-glow {
+    0%, 100% { box-shadow: 0 0 20px rgba(200, 169, 126, 0.2); }
+    50% { box-shadow: 0 0 40px rgba(200, 169, 126, 0.4); }
+  }
+  @keyframes gradient-shift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
+  @keyframes draw-line {
+    0% { stroke-dashoffset: 1000; }
+    100% { stroke-dashoffset: 0; }
+  }
+}
+
+@layer base {
+  * {
+    border-color: color-mix(in srgb, var(--color-cinema-text) 15%, transparent);
+  }
+
+  html {
+    background: var(--color-cinema-black);
+    /* Lenis recommendations */
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-cinema-muted) var(--color-cinema-black);
+  }
+
+  html.lenis,
+  html.lenis body {
+    height: auto;
+  }
+
+  .lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+  }
+
+  .lenis.lenis-smooth [data-lenis-prevent] {
+    overscroll-behavior: contain;
+  }
+
+  .lenis.lenis-stopped {
+    overflow: hidden;
+  }
+
+  body {
+    background-color: var(--color-cinema-black);
+    color: var(--color-cinema-text);
+    font-family: var(--font-body);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: clip;
+  }
+
+  ::selection {
+    background: var(--color-cinema-accent);
+    color: var(--color-cinema-black);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-cinema-accent);
+    outline-offset: 3px;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  button {
+    font: inherit;
+  }
+
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--color-cinema-black);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-cinema-muted);
+    border-radius: 3px;
+  }
+
+  /* Hide native cursor when the custom cursor is active (set on <html> by CustomCursor) */
+  html.custom-cursor,
+  html.custom-cursor * {
+    cursor: none !important;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+/* Cinematic gradient primitives — compose with from-, via- and to- stop utilities */
+@utility bg-gradient-radial {
+  background-image: radial-gradient(var(--tw-gradient-stops));
+}
+
+@utility bg-gradient-conic {
+  background-image: conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops));
+}
+
+@layer utilities {
+  /* Editorial label — small caps, wide tracking */
+  .label {
+    font-size: 0.625rem;
+    letter-spacing: 0.15625em;
+    text-transform: uppercase;
+  }
+
+  .font-serif {
+    font-family: var(--font-serif);
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  /* Thin bordered card */
+  .card-dark {
+    background: rgba(240, 240, 245, 0.02);
+    border: 1px solid rgba(240, 240, 245, 0.08);
+    border-radius: var(--radius-card);
+    transition: border-color 0.3s var(--ease-cinematic), background 0.3s var(--ease-cinematic),
+      transform 0.3s var(--ease-cinematic);
+  }
+
+  .card-dark:hover {
+    border-color: rgba(200, 169, 126, 0.35);
+    background: rgba(240, 240, 245, 0.045);
+  }
+}

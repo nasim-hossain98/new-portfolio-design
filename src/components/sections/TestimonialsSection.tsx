@@ -37,7 +37,7 @@ function TestimonialCard({
     >
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 -z-20 bg-[linear-gradient(145deg,rgba(255,255,255,0.055),transparent_32%,transparent_70%,rgba(200,169,126,0.05))]"
+        className="pointer-events-none absolute inset-0 -z-20 bg-[linear-gradient(145deg,rgba(255,255,255,0.055),transparent_32%,transparent_70%,rgba(167,139,250,0.05))]"
       />
       <div
         aria-hidden="true"
@@ -57,11 +57,11 @@ function TestimonialCard({
         <span
           className={cn(
             "relative flex h-12 w-12 items-center justify-center rounded-2xl border border-cinema-accent/20 bg-cinema-accent/[0.08] text-cinema-accent transition-transform duration-500",
-            active && "scale-105 shadow-[0_0_30px_rgba(200,169,126,0.12)]"
+            active && "scale-105 shadow-[0_0_30px_rgba(167,139,250,0.12)]"
           )}
         >
           <Quote size={19} fill="currentColor" strokeWidth={1.4} />
-          <span className="absolute -right-1 -top-1 h-2 w-2 rounded-full bg-cinema-accent shadow-[0_0_14px_rgba(200,169,126,0.8)]" />
+          <span className="absolute -right-1 -top-1 h-2 w-2 rounded-full bg-cinema-accent shadow-[0_0_14px_rgba(167,139,250,0.8)]" />
         </span>
 
         <div className="flex items-center gap-1" aria-label="5 out of 5 stars">

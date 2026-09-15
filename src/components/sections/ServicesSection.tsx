@@ -1,129 +1,182 @@
-import { useRef, type ComponentType, type MouseEvent } from "react";
-import { motion, useMotionTemplate, useMotionValue } from "framer-motion";
-import { ArrowUpRight, Code, Palette, TrendingUp } from "lucide-react";
-import { SectionHeader } from "../ui/SectionHeader";
-import { TiltCard } from "../ui/TiltCard";
+import { useRef, useState, type ReactNode } from "react";
+import { motion, useScroll, useSpring, useTransform } from "framer-motion";
+import { ArrowUpRight, Asterisk, CodeXml, PenTool, Plus, Search } from "lucide-react";
 import { services } from "../../data/portfolioData";
 import type { Service } from "../../types";
-import { easings } from "../../lib/utils";
+import { easings, cn } from "../../lib/utils";
 import { useReducedMotion } from "../../hooks/useReducedMotion";
-
-type IconComponent = ComponentType<{ className?: string; strokeWidth?: number }>;
-
-const SERVICE_ICONS: Record<number, IconComponent> = {
-  1: Palette,
-  2: Code,
-  3: TrendingUp,
-};
 
 const ACCENT = "200, 169, 126";
 
+type IconComponent = React.ComponentType<{
+  className?: string;
+  size?: number;
+  strokeWidth?: number;
+}>;
+
+const SERVICE_ICONS: Record<number, IconComponent> = {
+  1: PenTool,
+  2: CodeXml,
+  3: Search,
+};
+
+const HEADLINE: { text: string; accent?: boolean }[] = [
+  { text: "Services" },
+  { text: "built" },
+  { text: "to" },
+  { text: "make" },
+  { text: "your" },
+  { text: "brand" },
+  { text: "unmistakable", accent: true },
+];
+
+/** Index of the accordion panel open on first view (Development) */
+const DEFAULT_EXPANDED = 1;
+
+/* staggered reveal for panel content */
+const panelContainer = {
+  closed: { transition: { staggerChildren: 0.03, staggerDirection: -1 } },
+  open: { transition: { staggerChildren: 0.09, delayChildren: 0.1 } },
+};
+const panelItem = {
+  closed: { opacity: 0, y: 16 },
+  open: { opacity: 1, y: 0, transition: { duration: 0.55, ease: easings.expo } },
+};
+
 export function ServicesSection() {
+  const [expanded, setExpanded] = useState<number | null>(DEFAULT_EXPANDED);
+  const listRef = useRef<HTMLDivElement | null>(null);
   const reduced = useReducedMotion();
+
+  /* accent progress line that draws across the list while scrolling */
+  const { scrollYProgress } = useScroll({
+    target: listRef,
+    offset: ["start 0.9", "end 0.5"],
+  });
+  const lineScale = useSpring(scrollYProgress, { stiffness: 90, damping: 24 });
+  const dotLeft = useTransform(scrollYProgress, (v) => `${v * 100}%`);
 
   return (
     <section
       id="services"
-      className="relative z-10 overflow-hidden bg-cinema-black py-24 md:py-32"
+      className="relative z-10 overflow-hidden bg-cinema-black section-padding"
     >
-      {/* ------------------------------------------------ cinematic backdrop */}
+      {/* ----------------------------------------------------- backdrop */}
       <div className="pointer-events-none absolute inset-0" aria-hidden="true">
-        {/* drifting glow orbs */}
-        {reduced ? (
-          <>
-            <div
-              className="absolute -top-32 left-[12%] h-[26rem] w-[26rem] rounded-full opacity-70"
-              style={{
-                background: `radial-gradient(circle, rgba(${ACCENT},0.06) 0%, transparent 70%)`,
-                filter: "blur(40px)",
-              }}
-            />
-            <div
-              className="absolute -bottom-32 right-[8%] h-[30rem] w-[30rem] rounded-full opacity-60"
-              style={{
-                background: `radial-gradient(circle, rgba(${ACCENT},0.05) 0%, transparent 70%)`,
-                filter: "blur(56px)",
-              }}
-            />
-          </>
-        ) : (
-          <>
-            <motion.div
-              className="absolute -top-32 left-[12%] h-[26rem] w-[26rem] rounded-full"
-              style={{
-                background: `radial-gradient(circle, rgba(${ACCENT},0.06) 0%, transparent 70%)`,
-                filter: "blur(40px)",
-              }}
-              animate={{ y: [0, 48, 0], opacity: [0.5, 0.9, 0.5] }}
-              transition={{ duration: 16, repeat: Infinity, ease: "easeInOut" }}
-            />
-            <motion.div
-              className="absolute -bottom-32 right-[8%] h-[30rem] w-[30rem] rounded-full"
-              style={{
-                background: `radial-gradient(circle, rgba(${ACCENT},0.05) 0%, transparent 70%)`,
-                filter: "blur(56px)",
-              }}
-              animate={{ y: [0, -40, 0], opacity: [0.4, 0.75, 0.4] }}
-              transition={{
-                duration: 20,
-                repeat: Infinity,
-                ease: "easeInOut",
-                delay: 2,
-              }}
-            />
-          </>
-        )}
-
-        {/* nebula wash */}
-        <div
-          className="absolute inset-0"
+        {/* drifting glows */}
+        <motion.div
+          className="absolute -bottom-48 left-[4%] h-[30rem] w-[30rem] rounded-full"
           style={{
-            background: `
-              radial-gradient(ellipse at 30% 20%, rgba(${ACCENT},0.04) 0%, transparent 55%),
-              radial-gradient(ellipse at 75% 80%, rgba(${ACCENT},0.03) 0%, transparent 55%)
-            `,
+            background: `radial-gradient(circle, rgba(${ACCENT},0.05) 0%, transparent 70%)`,
+            filter: "blur(80px)",
           }}
+          animate={
+            reduced
+              ? undefined
+              : { y: [0, -40, 0], opacity: [0.4, 0.8, 0.4] }
+          }
+          transition={{ duration: 22, repeat: Infinity, ease: "easeInOut", delay: 2 }}
         />
 
-        {/* fine film-grain dot grid */}
+        {/* fine dot grid, faded toward the edges */}
         <div
-          className="absolute inset-0 opacity-40"
+          className="absolute inset-0 opacity-30"
           style={{
             backgroundImage:
-              "radial-gradient(circle, rgba(240,240,245,0.05) 1px, transparent 1px)",
+              "radial-gradient(circle, rgba(240,240,245,0.045) 1px, transparent 1px)",
             backgroundSize: "26px 26px",
+            maskImage:
+              "radial-gradient(ellipse 80% 70% at 50% 35%, black, transparent)",
           }}
         />
       </div>
 
-      {/* ------------------------------------------------------- content */}
-      <div className="relative mx-auto max-w-container-page px-6">
-        <SectionHeader
-          label="My Services"
-          title={
-            <>
-              What I <span className="italic text-cinema-accent">do</span>
-            </>
-          }
-          description="Three disciplines, one goal — a website that represents your brand and converts your visitors."
-        />
-
-        <div className="grid gap-6 md:grid-cols-3 md:gap-7">
-          {services.map((service, i) => (
-            <motion.article
-              key={service.id}
-              className="h-full"
-              initial={{ opacity: 0, y: 48 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.2 }}
-              transition={{
-                duration: 0.9,
-                ease: easings.cinematic,
-                delay: i * 0.12,
-              }}
+      {/* ----------------------------------------------------- content */}
+      <div className="relative mx-auto max-w-7xl px-6 md:px-0">
+        {/* header */}
+        <div className="relative mb-14 md:mb-20">
+          {/* slowly rotating asterisk */}
+          {!reduced && (
+            <motion.span
+              aria-hidden="true"
+              className="pointer-events-none absolute -top-8 right-0 hidden select-none text-cinema-accent/30 lg:block"
+              animate={{ rotate: 360 }}
+              transition={{ duration: 28, repeat: Infinity, ease: "linear" }}
             >
-              <ServiceCard service={service} index={i} />
-            </motion.article>
+              <Asterisk className="h-9 w-9" strokeWidth={1.25} />
+            </motion.span>
+          )}
+
+          <motion.div
+            className="mb-5 flex items-center gap-3"
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.5 }}
+            transition={{ duration: 0.6, ease: easings.cinematic }}
+          >
+            <span className="font-accent text-sm italic text-cinema-accent">(01)</span>
+            <span aria-hidden="true" className="h-px w-10 bg-cinema-accent/40" />
+            <span className="font-display text-[11px] uppercase tracking-[0.25em] text-cinema-muted">
+              What I do
+            </span>
+          </motion.div>
+
+          <h2 className="max-w-5xl font-display text-display-lg font-medium leading-[1.05] text-cinema-text">
+            {HEADLINE.map((word, i) => (
+              <MaskedWord
+                key={word.text}
+                delay={i * 0.06}
+                className={cn(
+                  word.accent &&
+                    "bg-gradient-to-r from-cinema-accent via-[#ead6a9] to-cinema-accent bg-clip-text font-accent font-light italic text-transparent [font-size:1.06em]"
+                )}
+              >
+                {word.text}
+              </MaskedWord>
+            ))}
+          </h2>
+
+          <motion.p
+            className="mt-6 max-w-md font-display text-sm leading-relaxed text-cinema-muted"
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.5 }}
+            transition={{ duration: 0.7, ease: easings.cinematic, delay: 0.15 }}
+          >
+            Three disciplines, one goal: a web presence that feels like your brand and
+            performs like your best salesperson.
+          </motion.p>
+        </div>
+
+        {/* accordion — opens on hover; click still toggles for keyboard/touch */}
+        <div
+          ref={listRef}
+          className="relative border-t border-cinema-muted/20"
+          onMouseLeave={() => setExpanded(DEFAULT_EXPANDED)}
+        >
+          {/* scroll progress line + comet dot */}
+          <motion.div
+            aria-hidden="true"
+            className="absolute left-0 top-0 h-[2px] w-full origin-left bg-gradient-to-r from-cinema-accent/0 via-cinema-accent to-cinema-accent/0 shadow-[0_0_14px_rgba(200,169,126,0.35)]"
+            style={{ scaleX: reduced ? 1 : lineScale }}
+          />
+          {!reduced && (
+            <motion.span
+              aria-hidden="true"
+              className="absolute top-0 z-10 h-2 w-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-cinema-accent shadow-[0_0_14px_rgba(200,169,126,0.9)]"
+              style={{ left: dotLeft }}
+            />
+          )}
+
+          {services.map((service, i) => (
+            <ServiceRow
+              key={service.id}
+              service={service}
+              index={i}
+              expanded={expanded === i}
+              onToggle={() => setExpanded(expanded === i ? null : i)}
+              onMouseEnter={() => setExpanded(i)}
+            />
           ))}
         </div>
       </div>
@@ -131,168 +184,252 @@ export function ServicesSection() {
   );
 }
 
-/* ------------------------------------------------------------------ card */
+/* ------------------------------------------------------- masked word */
 
-function ServiceCard({ service, index }: { service: Service; index: number }) {
+function MaskedWord({
+  children,
+  delay = 0,
+  className,
+}: {
+  children: ReactNode;
+  delay?: number;
+  className?: string;
+}) {
   const reduced = useReducedMotion();
-  const ref = useRef<HTMLDivElement | null>(null);
-
-  const mx = useMotionValue(50);
-  const my = useMotionValue(30);
-
-  /* soft interior spotlight that follows the pointer */
-  const spotlight = useMotionTemplate`radial-gradient(420px circle at ${mx}% ${my}%, rgba(${ACCENT},0.10) 0%, transparent 65%)`;
-  /* brighter gradient masked to the 1px border ring */
-  const ringGlow = useMotionTemplate`radial-gradient(260px circle at ${mx}% ${my}%, rgba(${ACCENT},0.55) 0%, transparent 70%)`;
-
-  const onMouseMove = (e: MouseEvent<HTMLDivElement>) => {
-    if (reduced || !ref.current) return;
-    const rect = ref.current.getBoundingClientRect();
-    mx.set(((e.clientX - rect.left) / rect.width) * 100);
-    my.set(((e.clientY - rect.top) / rect.height) * 100);
-  };
-
-  const Icon = SERVICE_ICONS[service.id] ?? Palette;
 
   return (
-    <TiltCard maxTilt={7} scale={1.03} className="group h-full rounded-card">
-      <div
-        ref={ref}
-        onMouseMove={onMouseMove}
-        className="relative flex h-full min-h-[26rem] flex-col overflow-hidden rounded-card border border-cinema-text/10 bg-gradient-to-b from-cinema-text/[0.05] via-cinema-text/[0.02] to-transparent transition-[border-color] duration-500 group-hover:border-cinema-accent/25"
+    <span className="inline-block overflow-hidden align-bottom">
+      <motion.span
+        className={cn("inline-block will-change-transform", className)}
+        initial={reduced ? false : { y: "115%" }}
+        whileInView={{ y: "0%" }}
+        viewport={{ once: true, amount: 0.5 }}
+        transition={{ duration: 0.9, ease: easings.expo, delay }}
       >
-        {/* mouse spotlight */}
-        {!reduced && (
-          <motion.div
+        {children}
+        {"\u00A0"}
+      </motion.span>
+    </span>
+  );
+}
+
+/* --------------------------------------------------------- row */
+
+interface ServiceRowProps {
+  service: Service;
+  index: number;
+  expanded: boolean;
+  onToggle: () => void;
+  onMouseEnter: () => void;
+}
+
+function ServiceRow({
+  service,
+  index,
+  expanded,
+  onToggle,
+  onMouseEnter,
+}: ServiceRowProps) {
+  const reduced = useReducedMotion();
+  const panelId = `service-panel-${service.id}`;
+  const Icon = SERVICE_ICONS[service.id] ?? PenTool;
+  const delay = index * 0.08;
+
+  return (
+    <motion.div
+      onMouseEnter={onMouseEnter}
+      className="border-b border-cinema-muted/20 transition-colors duration-500 hover:border-cinema-accent/20"
+      initial={{ opacity: 0, y: 32 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.2 }}
+      transition={{ duration: 0.8, ease: easings.cinematic, delay }}
+    >
+      <button
+        type="button"
+        aria-expanded={expanded}
+        aria-controls={panelId}
+        onClick={onToggle}
+        className="group relative flex w-full items-center gap-4 px-1 py-8 text-left transition-colors duration-500 md:gap-6 md:py-12 hover:bg-cinema-text/[0.03] focus-visible:bg-cinema-text/[0.03] focus-visible:outline-none"
+      >
+        {/* gradient sweep on hover / expanded */}
+        <span
+          aria-hidden="true"
+          className={cn(
+            "pointer-events-none absolute inset-y-0 left-0 w-1/2 bg-gradient-to-r from-cinema-accent/[0.07] to-transparent transition-opacity duration-700",
+            expanded ? "opacity-100" : "opacity-0 group-hover:opacity-100"
+          )}
+        />
+
+        {/* left accent line — glows when expanded */}
+        <span
+          aria-hidden="true"
+          className={cn(
+            "absolute left-0 top-0 h-full w-px transition-all duration-500",
+            expanded
+              ? "bg-cinema-accent/70 shadow-[0_0_16px_rgba(200,169,126,0.45)]"
+              : "bg-cinema-accent/0 group-hover:bg-cinema-accent/60"
+          )}
+        />
+
+        {/* ghost number — faint by default, slides in on hover */}
+        <span
+          aria-hidden="true"
+          className={cn(
+            "pointer-events-none absolute right-2 top-1/2 hidden -translate-y-1/2 select-none font-display text-[clamp(5rem,10vw,9rem)] font-semibold leading-none text-cinema-text transition-[opacity,transform] duration-700 md:block",
+            expanded
+              ? "-translate-x-1 opacity-[0.07]"
+              : "opacity-[0.04] group-hover:-translate-x-2 group-hover:opacity-[0.1]"
+          )}
+        >
+          {service.number}
+        </span>
+
+        {/* number + icon badge */}
+        <span className="relative z-10 flex shrink-0 items-center gap-3 md:gap-4">
+          <span
+            className={cn(
+              "font-accent text-sm italic transition-colors duration-500 md:text-base",
+              expanded
+                ? "text-cinema-accent"
+                : "text-cinema-muted/70 group-hover:text-cinema-accent"
+            )}
+          >
+            {service.number}
+          </span>
+          <span
             aria-hidden="true"
-            className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-700 group-hover:opacity-100"
-            style={{ background: spotlight }}
-          />
-        )}
+            className={cn(
+              "flex size-9 items-center justify-center rounded-lg border transition-all duration-500 md:size-10",
+              expanded
+                ? "border-cinema-accent/60 bg-cinema-accent/[0.06] text-cinema-accent shadow-[0_0_18px_rgba(200,169,126,0.25)]"
+                : "border-cinema-muted/20 text-cinema-muted group-hover:border-cinema-accent/50 group-hover:bg-cinema-accent/[0.04] group-hover:text-cinema-accent"
+            )}
+          >
+            <Icon
+              size={17}
+              strokeWidth={2}
+              className="transition-transform duration-500 group-hover:-rotate-6 group-hover:scale-110"
+            />
+          </span>
+        </span>
 
-        {/* glowing border ring that follows the pointer */}
-        {!reduced && (
-          <motion.div
-            aria-hidden="true"
-            className="pointer-events-none absolute inset-0 rounded-card opacity-0 transition-opacity duration-500 group-hover:opacity-100"
-            style={{
-              background: ringGlow,
-              padding: 1,
-              WebkitMask:
-                "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
-              WebkitMaskComposite: "xor",
-              mask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
-              maskComposite: "exclude",
-            }}
-          />
-        )}
-
-        {/* cinematic corner brackets */}
-        <span
-          aria-hidden="true"
-          className="absolute left-4 top-4 h-5 w-5 border-l border-t border-cinema-accent/25 transition-colors duration-500 group-hover:border-cinema-accent/70"
-        />
-        <span
-          aria-hidden="true"
-          className="absolute bottom-4 right-4 h-5 w-5 border-b border-r border-cinema-accent/25 transition-colors duration-500 group-hover:border-cinema-accent/70"
-        />
-
-        {/* top sweep line on hover */}
-        <span
-          aria-hidden="true"
-          className="absolute inset-x-8 top-0 h-px origin-center scale-x-0 bg-gradient-to-r from-transparent via-cinema-accent to-transparent transition-transform duration-700 ease-out group-hover:scale-x-100"
-        />
-
-        {/* ------------------------------------------------------ content */}
-        <div className="relative z-10 flex h-full flex-col p-8 md:p-9">
-          {/* icon badge + ghost number */}
-          <div className="relative">
+        {/* title with masked reveal */}
+        <h3
+          className={cn(
+            "relative z-10 min-w-0 flex-1 font-display font-medium tracking-tight transition-[color,transform] duration-500 group-hover:translate-x-2",
+            expanded
+              ? "text-cinema-accent"
+              : "text-cinema-text group-hover:text-cinema-accent"
+          )}
+        >
+          <span className="block overflow-hidden">
             <motion.span
-              initial={{ opacity: 0, scale: 0.6 }}
-              whileInView={{ opacity: 1, scale: 1 }}
+              className="block will-change-transform"
+              initial={reduced ? false : { y: "112%" }}
+              whileInView={{ y: "0%" }}
               viewport={{ once: true }}
               transition={{
-                duration: 0.7,
-                ease: easings.back,
-                delay: 0.2 + index * 0.12,
-              }}
-              className="relative flex h-14 w-14 items-center justify-center rounded-full border border-cinema-text/15 bg-cinema-text/[0.03] transition-colors duration-500 group-hover:border-cinema-accent/50 group-hover:bg-cinema-accent/10"
-            >
-              <Icon
-                className="h-6 w-6 text-cinema-accent"
-                strokeWidth={1.5}
-                aria-hidden="true"
-              />
-            </motion.span>
-
-            <motion.span
-              aria-hidden="true"
-              initial={{ opacity: 0, y: -12 }}
-              whileInView={{ opacity: 0.85, y: 0 }}
-              viewport={{ once: true }}
-              transition={{
-                duration: 1,
-                ease: easings.cinematic,
-                delay: 0.3 + index * 0.12,
-              }}
-              className="pointer-events-none absolute -top-1 right-0 select-none font-display text-[6.5rem] font-light leading-[0.75]"
-              style={{
-                WebkitTextStroke: `1.5px rgba(${ACCENT},0.35)`,
-                WebkitTextFillColor: "transparent",
-                color: "transparent",
+                duration: 0.9,
+                ease: easings.expo,
+                delay: delay + 0.1,
               }}
             >
-              {service.number}
+              {service.title.toUpperCase()}
             </motion.span>
-          </div>
+          </span>
+        </h3>
 
-          {/* title */}
-          <h3 className="mt-9 font-display text-[1.9rem] font-light leading-tight tracking-wide text-cinema-text">
-            {service.title}
-          </h3>
+        {/* explore / close + rotating plus */}
+        <span className="relative z-10 ml-auto flex shrink-0 items-center gap-3">
+          <span className="hidden font-display text-[10px] uppercase tracking-[0.2em] text-cinema-muted transition-colors duration-300 group-hover:text-cinema-text md:block">
+            {expanded ? "Close" : "Explore"}
+          </span>
+          <motion.span
+            aria-hidden="true"
+            animate={{ rotate: expanded ? 45 : 0 }}
+            transition={{ duration: 0.5, ease: easings.snappy }}
+            className={cn(
+              "flex size-9 items-center justify-center rounded-full border transition-colors duration-500",
+              expanded
+                ? "border-cinema-accent/60 bg-cinema-accent/10 text-cinema-accent shadow-[0_0_18px_rgba(200,169,126,0.3)]"
+                : "border-cinema-muted/20 text-cinema-text group-hover:border-cinema-accent/50 group-hover:text-cinema-accent"
+            )}
+          >
+            <Plus size={15} strokeWidth={2} />
+          </motion.span>
+        </span>
+      </button>
 
-          {/* description */}
-          <p className="mt-4 text-[0.95rem] leading-relaxed text-cinema-text/60">
+      {/* panel */}
+      <motion.div
+        id={panelId}
+        role="region"
+        aria-label={`${service.title} details`}
+        className="overflow-hidden"
+        initial={false}
+        animate={{
+          height: expanded ? "auto" : 0,
+          opacity: expanded ? 1 : 0,
+        }}
+        transition={{
+          duration: reduced ? 0 : 0.6,
+          ease: easings.expo,
+        }}
+      >
+        <motion.div
+          variants={reduced ? undefined : panelContainer}
+          initial={reduced ? false : "closed"}
+          animate={expanded ? "open" : "closed"}
+          className="grid gap-8 px-1 pb-12 pt-2 md:grid-cols-12 md:gap-6 md:pb-16"
+        >
+          <motion.p
+            variants={panelItem}
+            className="border-l border-cinema-accent/25 pl-4 font-display text-sm leading-relaxed text-cinema-muted md:col-span-6 md:col-start-3 md:pl-5"
+          >
             {service.description}
-          </p>
+          </motion.p>
 
-          {/* tags */}
           {service.tags && service.tags.length > 0 && (
-            <ul className="mt-6 flex flex-wrap gap-2">
-              {service.tags.map((tag) => (
-                <li
-                  key={tag}
-                  className="label rounded-pill border border-cinema-text/12 px-3 py-1.5 text-cinema-muted transition-colors duration-500 group-hover:border-cinema-accent/30 group-hover:text-cinema-text/80"
-                >
-                  {tag}
-                </li>
-              ))}
-            </ul>
+            <motion.div
+              variants={panelItem}
+              className="md:col-span-3 md:col-start-10"
+            >
+              <p className="font-display text-[10px] uppercase tracking-[0.25em] text-cinema-muted/70">
+                Key deliverables
+              </p>
+              <ul className="mt-4 flex flex-wrap gap-2">
+                {service.tags.map((tag) => (
+                  <li
+                    key={tag}
+                    className="rounded-pill border border-cinema-muted/20 px-3.5 py-1.5 font-display text-[10px] uppercase tracking-[0.18em] text-cinema-muted transition-colors duration-300 hover:border-cinema-accent/45 hover:text-cinema-text"
+                  >
+                    {tag}
+                  </li>
+                ))}
+              </ul>
+            </motion.div>
           )}
 
-          {/* flexible spacer — guarantees breathing room above the CTA */}
-          <div aria-hidden="true" className="min-h-8 flex-1" />
-
-          {/* CTA — full-width footer row */}
-          <a
+          <motion.a
+            variants={panelItem}
             href={service.link}
-            aria-label={`${service.linkText} — ${service.title}`}
-            className="flex items-center justify-between gap-4 border-t border-cinema-text/10 pt-6"
+            className="group/link inline-flex w-fit items-center gap-2 font-display text-[11px] uppercase tracking-[0.2em] text-cinema-accent transition-colors duration-300 hover:text-cinema-text focus-visible:text-cinema-text focus-visible:outline-none md:col-span-6 md:col-start-3"
           >
-            <span className="label text-cinema-muted transition-colors duration-500 group-hover:text-cinema-accent">
-              {service.linkText}
-            </span>
-            <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-cinema-text/20 transition-all duration-500 group-hover:border-cinema-accent/60 group-hover:bg-cinema-accent/10">
-              <ArrowUpRight
-                size={20}
-                strokeWidth={1.75}
+            <span className="relative">
+              {service.linkText.toUpperCase()}
+              <span
                 aria-hidden="true"
-                className="text-cinema-text transition-all duration-500 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-cinema-accent"
+                className="absolute inset-x-0 -bottom-1.5 h-px origin-left scale-x-0 bg-cinema-accent/60 transition-transform duration-300 ease-out group-hover/link:scale-x-100"
               />
             </span>
-          </a>
-        </div>
-      </div>
-    </TiltCard>
+            <ArrowUpRight
+              size={14}
+              strokeWidth={2}
+              className="transition-transform duration-300 group-hover/link:translate-x-1 group-hover/link:-translate-y-1"
+            />
+          </motion.a>
+        </motion.div>
+      </motion.div>
+    </motion.div>
   );
 }

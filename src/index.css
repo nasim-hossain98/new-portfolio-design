@@ -36,11 +36,12 @@
   --color-cinema-surface: #12121a;
   --color-cinema-text: #f0f0f5;
   --color-cinema-muted: #6b6b7b;
-  --color-cinema-accent: #c8a97e;
+  --color-cinema-accent: #a78bfa;
 
   /* Typography — cinematic editorial: Cormorant Garamond display + Inter body */
   --font-display: "Cormorant Garamond", Georgia, "Times New Roman", serif;
   --font-body: "Inter", system-ui, sans-serif;
+  --font-accent: "Crimson Pro", Georgia, serif;
 
   /* Display sizes — tuned for Cormorant Garamond (reads narrow, size up) */
   --text-display-xl: clamp(3.5rem, 9vw, 8.5rem);
@@ -191,6 +192,19 @@
     font-size: 0.625rem;
     letter-spacing: 0.15625em;
     text-transform: uppercase;
+  }
+
+  /* Vertical section rhythm — used by full-width editorial sections */
+  .section-padding {
+    padding-top: 6rem;
+    padding-bottom: 6rem;
+  }
+
+  @media (min-width: 768px) {
+    .section-padding {
+      padding-top: 9rem;
+      padding-bottom: 9rem;
+    }
   }
 
   .font-serif {

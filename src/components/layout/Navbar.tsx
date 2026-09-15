@@ -124,10 +124,10 @@ export function Navbar() {
           {/* logo — scrolls to top */}
           <button
             onClick={() => go("#home")}
-            aria-label="arik — back to top"
+            aria-label="Nasim Hossain — back to top"
             className="justify-self-start font-display text-xl tracking-wider text-cinema-text transition-colors duration-300 hover:text-cinema-accent focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cinema-accent"
           >
-            arik<span className="text-cinema-accent">.</span>
+            Nasim Hossain<span className="text-cinema-accent">.</span>
           </button>
 
           {/* desktop nav */}

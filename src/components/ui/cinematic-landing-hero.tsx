@@ -14,10 +14,10 @@ const STYLES = `
   .cinematic-hero .text-silver { background:linear-gradient(180deg,#fff 0%,#70707e 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; filter:drop-shadow(0 10px 20px rgba(0,0,0,.35)); transform:translateZ(0); }
   .cinematic-hero .card-silver { background:linear-gradient(180deg,#fff 0%,#a1a1aa 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; filter:drop-shadow(0 12px 24px rgba(0,0,0,.8)); transform:translateZ(0); }
   .cinematic-hero .depth-card { background:linear-gradient(145deg,#18243e 0%,#090b11 62%,#08090d 100%); box-shadow:0 40px 100px -20px rgba(0,0,0,.9),0 20px 40px -20px rgba(0,0,0,.8),inset 0 1px 2px rgba(255,255,255,.18),inset 0 -2px 4px rgba(0,0,0,.8); border:1px solid rgba(255,255,255,.06); }
-  .cinematic-hero .card-sheen { position:absolute; inset:0; border-radius:inherit; pointer-events:none; z-index:50; background:radial-gradient(800px circle at var(--mouse-x,50%) var(--mouse-y,50%),rgba(200,169,126,.12),transparent 42%); mix-blend-mode:screen; }
+  .cinematic-hero .card-sheen { position:absolute; inset:0; border-radius:inherit; pointer-events:none; z-index:50; background:radial-gradient(800px circle at var(--mouse-x,50%) var(--mouse-y,50%),rgba(167,139,250,.12),transparent 42%); mix-blend-mode:screen; }
   .cinematic-hero .portrait-stage { transform-style:preserve-3d; filter:drop-shadow(0 42px 45px rgba(0,0,0,.55)); }
-  .cinematic-hero .portrait-aura { position:absolute; inset:-12%; border-radius:45%; background:radial-gradient(circle at 50% 35%,rgba(200,169,126,.25),rgba(45,70,115,.14) 38%,transparent 70%); filter:blur(35px); transform:translateZ(-50px); }
-  .cinematic-hero .portrait-offset-frame { position:absolute; inset:18px -15px -18px 15px; border:1px solid rgba(200,169,126,.34); border-radius:2.2rem; transform:translateZ(-18px); }
+  .cinematic-hero .portrait-aura { position:absolute; inset:-12%; border-radius:45%; background:radial-gradient(circle at 50% 35%,rgba(167,139,250,.25),rgba(45,70,115,.14) 38%,transparent 70%); filter:blur(35px); transform:translateZ(-50px); }
+  .cinematic-hero .portrait-offset-frame { position:absolute; inset:18px -15px -18px 15px; border:1px solid rgba(167,139,250,.34); border-radius:2.2rem; transform:translateZ(-18px); }
   .cinematic-hero .portrait-shell { position:relative; isolation:isolate; overflow:hidden; border-radius:2rem; background:#08090d; border:1px solid rgba(255,255,255,.12); box-shadow:inset 0 1px 0 rgba(255,255,255,.16),inset 0 0 55px rgba(0,0,0,.35),0 35px 80px rgba(0,0,0,.6); }
   .cinematic-hero .portrait-shell::before { content:""; position:absolute; inset:0; z-index:4; pointer-events:none; border-radius:inherit; box-shadow:inset 0 0 0 1px rgba(255,255,255,.04),inset 0 -80px 100px rgba(0,0,0,.35); }
   .cinematic-hero .portrait-image { transition:transform 1.4s cubic-bezier(.16,1,.3,1),filter 1s ease; filter:saturate(.55) contrast(1.12) brightness(.82); }
@@ -183,7 +183,7 @@ export function CinematicHero({
                     <div className="absolute inset-0 z-[2] bg-cinema-accent/[0.05] mix-blend-color" aria-hidden="true" />
                     <div className="portrait-sheen" aria-hidden="true" />
                     <div className="portrait-detail absolute top-6 right-6 z-10 flex items-center gap-2 rounded-full border border-white/10 bg-black/30 px-3 py-1.5 backdrop-blur-md">
-                      <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-cinema-accent shadow-[0_0_8px_rgba(200,169,126,.8)]" />
+                      <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-cinema-accent shadow-[0_0_8px_rgba(167,139,250,.8)]" />
                       <span className="text-[9px] font-bold tracking-[.14em] text-white/70 uppercase">Available</span>
                     </div>
                     <div className="portrait-detail absolute inset-x-0 bottom-0 z-10 p-7 md:p-8">

@@ -33,6 +33,7 @@ export const services: Service[] = [
       "Visually stunning web designs that captivate your audience by blending your brand voice and customer needs.",
     link: "#services",
     linkText: "About Webdesign",
+    tags: ["UX Design", "Wireframe", "Interactive Prototype", "Responsive Design"],
   },
   {
     id: 2,
@@ -42,6 +43,7 @@ export const services: Service[] = [
       "Get custom web development solutions that are tailored to your specifications, designed to deliver a flawless user experience.",
     link: "#services",
     linkText: "About Webflow",
+    tags: ["Custom Development", "Responsive Frontend", "CMS Integration", "Motion & Animation"],
   },
   {
     id: 3,
@@ -51,6 +53,7 @@ export const services: Service[] = [
       "Proven SEO strategies that enhance your online performance, bringing you to the forefront of organic search results.",
     link: "#services",
     linkText: "About SEO",
+    tags: ["Keyword Research", "On-page SEO", "Content Strategy", "Performance Tracking"],
   },
 ];
 

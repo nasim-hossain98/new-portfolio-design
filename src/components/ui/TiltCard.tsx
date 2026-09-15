@@ -40,7 +40,7 @@ export function TiltCard({
 
   const glareX = useTransform(px, [0, 1], [20, 80]);
   const glareY = useTransform(py, [0, 1], [20, 80]);
-  const glare = useMotionTemplate`radial-gradient(420px circle at ${glareX}% ${glareY}%, rgba(200,169,126,0.10), transparent 65%)`;
+  const glare = useMotionTemplate`radial-gradient(420px circle at ${glareX}% ${glareY}%, rgba(167,139,250,0.10), transparent 65%)`;
 
   const onMouseMove = (e: MouseEvent<HTMLDivElement>) => {
     if (reduced || !ref.current) return;

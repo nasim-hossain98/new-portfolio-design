@@ -173,33 +173,60 @@ export function AboutSection() {
 
               <motion.div
                 style={{ translateZ: 75 }}
-                className="absolute -right-5 top-8 rounded-2xl border border-cinema-text/10 bg-cinema-black/75 px-4 py-3 shadow-2xl backdrop-blur-xl md:-right-12 md:top-12"
+                className="group absolute -right-5 top-8 overflow-hidden rounded-2xl border border-cinema-text/10 bg-cinema-black/75 px-4 py-3 shadow-2xl backdrop-blur-xl md:-right-12 md:top-12"
+                whileHover={{ scale: 1.04, y: -2 }}
+                transition={{ type: "spring", stiffness: 300, damping: 18 }}
               >
-                <div className="flex items-center gap-3">
+                <span className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-cinema-accent/60 to-transparent" />
+                <span className="pointer-events-none absolute -inset-8 rounded-full bg-cinema-accent/10 opacity-0 blur-2xl transition-opacity duration-500 group-hover:opacity-100" />
+                <div className="relative flex items-center gap-3">
                   <span className="relative flex h-2.5 w-2.5">
                     <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-cinema-accent opacity-50" />
-                    <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-cinema-accent" />
+                    <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-cinema-accent shadow-[0_0_8px_2px_var(--color-cinema-accent)]" />
                   </span>
                   <div>
-                    <p className="text-[0.58rem] uppercase tracking-[0.18em] text-cinema-muted">
+                    <p className="flex items-center gap-1 text-[0.58rem] uppercase tracking-[0.18em] text-cinema-muted">
                       Current status
                     </p>
-                    <p className="mt-0.5 text-xs text-cinema-text">Available for projects</p>
+                    <p className="mt-0.5 text-xs font-medium text-cinema-text">
+                      Available for projects
+                    </p>
                   </div>
                 </div>
               </motion.div>
 
               <motion.div
                 style={{ translateZ: 55 }}
-                className="absolute -bottom-6 -left-3 flex h-20 w-20 items-center justify-center rounded-full border border-cinema-accent/30 bg-cinema-surface/90 shadow-2xl backdrop-blur-xl md:-left-10 md:h-24 md:w-24"
+                className="group absolute -bottom-6 -left-3 h-20 w-20 md:-left-10 md:h-24 md:w-24"
+                whileHover={{ scale: 1.08 }}
+                transition={{ type: "spring", stiffness: 300, damping: 18 }}
               >
-                <div className="text-center">
-                  <Asterisk className="mx-auto mb-1 h-4 w-4 text-cinema-accent" />
-                  <span className="label text-[0.5rem] leading-tight text-cinema-muted">
-                    Since
-                    <br />
-                    2019
-                  </span>
+                <div className="relative flex h-full w-full items-center justify-center">
+                  <div className="absolute inset-0 rounded-full bg-cinema-accent/25 blur-xl transition-opacity duration-500 group-hover:opacity-100 opacity-60" />
+                  <motion.div
+                    className="absolute inset-0 rounded-full"
+                    style={{
+                      background:
+                        "conic-gradient(from 0deg, transparent 0deg, var(--color-cinema-accent) 120deg, transparent 260deg)",
+                    }}
+                    animate={reduced ? undefined : { rotate: 360 }}
+                    transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+                  />
+                  <div className="absolute inset-[2px] flex items-center justify-center rounded-full border border-cinema-accent/20 bg-gradient-to-br from-cinema-surface/95 to-cinema-black/95 shadow-2xl backdrop-blur-xl">
+                    <div className="text-center">
+                      <motion.div
+                        animate={reduced ? undefined : { rotate: 360 }}
+                        transition={{ duration: 14, repeat: Infinity, ease: "linear" }}
+                      >
+                        <Asterisk className="mx-auto mb-1 h-4 w-4 text-cinema-accent" />
+                      </motion.div>
+                      <span className="label block text-[0.5rem] font-medium uppercase leading-tight tracking-[0.15em] text-cinema-muted">
+                        Since
+                        <br />
+                        <span className="text-cinema-text">2019</span>
+                      </span>
+                    </div>
+                  </div>
                 </div>
               </motion.div>
             </motion.div>

@@ -210,7 +210,7 @@ export function CinematicHero({
             <div className="card-copy gsap-reveal order-3 z-20 flex w-full flex-col justify-center px-4 text-center lg:order-1 lg:px-0 lg:text-left">
               <h3 className="text-2xl font-bold tracking-tight text-white md:text-3xl lg:mb-5 lg:text-4xl">{cardHeading}</h3>
               <p className="mx-auto hidden max-w-sm text-sm leading-relaxed font-normal text-blue-100/65 md:block md:text-base lg:mx-0 lg:max-w-none lg:text-lg">{cardDescription}</p>
-              <a href="mailto:hello@arik.design" className="mt-7 hidden w-fit items-center gap-2 text-xs font-bold tracking-widest text-cinema-accent uppercase lg:flex">Say hello <Mail size={14} /></a>
+              <a href="mailto:nasimhossain105@gmail.com" className="mt-7 hidden w-fit items-center gap-2 text-xs font-bold tracking-widest text-cinema-accent uppercase lg:flex">Say hello <Mail size={14} /></a>
             </div>
           </div>
         </div>

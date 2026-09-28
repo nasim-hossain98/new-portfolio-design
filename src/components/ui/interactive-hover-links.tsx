@@ -111,6 +111,7 @@ function HoverLinkRow({
   };
 
   const letterShift = reduced ? 0 : 14;
+  const isExternal = /^https?:\/\//.test(link.href);
 
   return (
     <motion.div
@@ -126,6 +127,8 @@ function HoverLinkRow({
       <motion.a
         ref={ref}
         href={link.href}
+        target={isExternal ? "_blank" : undefined}
+        rel={isExternal ? "noopener noreferrer" : undefined}
         data-cursor="view"
         onMouseMove={handleMouseMove}
         onMouseLeave={resetPointer}

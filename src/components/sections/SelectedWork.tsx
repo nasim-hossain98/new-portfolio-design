@@ -1,6 +1,6 @@
 import { Component, lazy, Suspense, useRef, type ReactNode } from "react";
 import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
-import { ArrowDown } from "lucide-react";
+import { ArrowDown, ArrowRight } from "lucide-react";
 import { PROJECTS } from "@/data/projects";
 import {
   InteractiveHoverLinks,
@@ -234,6 +234,69 @@ export function SelectedWork() {
           }}
         >
           <InteractiveHoverLinks links={workLinks} />
+        </motion.div>
+
+        {/* ── Explore more CTA ──────────────────── */}
+        <motion.div
+          className="mt-16 flex justify-center md:mt-20"
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.6 }}
+          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+        >
+          <motion.a
+            href="#work-grid"
+            data-cursor="view"
+            whileHover={{ y: -3 }}
+            whileTap={{ scale: 0.97 }}
+            transition={{ type: "spring", stiffness: 400, damping: 22 }}
+            className="group relative inline-flex items-center gap-4 overflow-hidden rounded-full px-9 py-4 text-cinema-text transition-colors duration-500 hover:text-cinema-text focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cinema-accent/50"
+          >
+            {/* soft outer glow on hover */}
+            <span className="pointer-events-none absolute -inset-6 z-0 rounded-full bg-cinema-accent/20 opacity-0 blur-3xl transition-opacity duration-700 group-hover:opacity-100" />
+
+            {/* thin gradient border ring (stays visible, brightens on hover) */}
+            <span className="pointer-events-none absolute inset-0 z-0 rounded-full bg-gradient-to-r from-cinema-text/20 via-cinema-text/[.06] to-cinema-text/20 p-px transition-all duration-500 group-hover:from-cinema-accent/70 group-hover:via-cinema-accent/20 group-hover:to-cinema-accent/70">
+              <span className="block h-full w-full rounded-full bg-transparent" />
+            </span>
+
+            {/* glassy base surface (very transparent) */}
+            <span className="pointer-events-none absolute inset-px z-0 rounded-full bg-white/[.02] backdrop-blur-md transition-colors duration-500 group-hover:bg-cinema-accent/[.06]" />
+
+            {/* translucent radial fill that grows from center */}
+            <span className="pointer-events-none absolute left-1/2 top-1/2 z-0 aspect-square w-[135%] -translate-x-1/2 -translate-y-1/2 scale-0 rounded-full bg-cinema-accent/15 opacity-0 blur-md transition-all duration-700 ease-smooth group-hover:scale-100 group-hover:opacity-100" />
+
+            {/* shine sweep */}
+            <span className="pointer-events-none absolute inset-0 z-10 -translate-x-full skew-x-[-20deg] bg-gradient-to-r from-transparent via-white/15 to-transparent transition-transform duration-[1100ms] ease-smooth group-hover:translate-x-full" />
+
+            {/* pulsing dot */}
+            <span className="relative z-20 flex size-2 shrink-0 transition-transform duration-500 ease-smooth group-hover:scale-125">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-cinema-accent opacity-70" />
+              <span className="relative inline-flex size-2 rounded-full bg-cinema-accent shadow-[0_0_12px_var(--color-cinema-accent)]" />
+            </span>
+
+            {/* label with sliding text */}
+            <span className="relative z-20 grid overflow-hidden text-sm font-medium uppercase tracking-[0.18em]">
+              <span className="col-start-1 row-start-1 transition-transform duration-500 ease-smooth group-hover:-translate-y-full group-hover:text-cinema-accent">
+                Explore More Work
+              </span>
+              <span className="col-start-1 row-start-1 translate-y-full text-cinema-accent transition-transform duration-500 ease-smooth group-hover:translate-y-0">
+                Explore More Work
+              </span>
+            </span>
+
+            {/* arrow in a circle */}
+            <span className="relative z-20 flex size-6 shrink-0 items-center justify-center overflow-hidden rounded-full transition-colors duration-500 group-hover:text-cinema-accent">
+              <ArrowRight
+                size={16}
+                className="absolute transition-all duration-500 ease-smooth group-hover:translate-x-6 group-hover:-translate-y-6 group-hover:opacity-0"
+              />
+              <ArrowRight
+                size={16}
+                className="absolute -translate-x-6 translate-y-6 opacity-0 transition-all duration-500 ease-smooth group-hover:translate-x-0 group-hover:translate-y-0 group-hover:opacity-100"
+              />
+            </span>
+          </motion.a>
         </motion.div>
       </div>
     </section>

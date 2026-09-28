@@ -319,7 +319,7 @@ export const CTASection = () => {
                 className="mt-10"
               >
                 <a
-                  href="mailto:hello@arik.design"
+                  href="mailto:nasimhossain105@gmail.com"
                   className="group relative inline-flex items-center gap-3 overflow-hidden rounded-full border border-[#a78bfa]/25 px-8 py-4 text-sm font-medium tracking-wide text-white transition-all duration-300 select-none hover:-translate-y-1"
                   style={{
                     background:

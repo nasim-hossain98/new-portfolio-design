@@ -10,7 +10,7 @@ import type {
 export const personalInfo: PersonalInfo = {
   name: "Mohammad Nasim",
   title: "UI/UX Design & Frontend Design",
-  email: "hello@arik.design",
+  email: "nasimhossain105@gmail.com",
   phone: "+1 234 567 890",
   location: "Remote / Worldwide",
   bio: "Premium web design, Webflow, and SEO services to help your business stand out.",

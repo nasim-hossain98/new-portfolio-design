@@ -161,11 +161,11 @@ export function CardStack<T extends CardStackItem>({
       >
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute inset-x-[15%] bottom-5 h-32 rounded-[50%] bg-cinema-accent/[0.07] blur-3xl"
+          className="pointer-events-none absolute inset-x-[15%] bottom-5 h-32 rounded-[50%] bg-cinema-accent/[0.09] blur-3xl"
         />
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute left-1/2 top-20 h-56 w-[55%] -translate-x-1/2 rounded-full bg-cinema-text/[0.025] blur-3xl"
+          className="pointer-events-none absolute left-1/2 top-20 h-56 w-[55%] -translate-x-1/2 rounded-full bg-cinema-text/[0.03] blur-3xl"
         />
 
         <div
@@ -206,10 +206,10 @@ export function CardStack<T extends CardStackItem>({
                 <motion.div
                   key={item.id}
                   className={cn(
-                    "absolute bottom-0 overflow-hidden rounded-[1.65rem] border will-change-transform select-none",
+                    "absolute bottom-0 overflow-hidden rounded-[1.75rem] border will-change-transform select-none transition-colors duration-500",
                     isActive
-                      ? "cursor-grab border-cinema-accent/35 shadow-[0_35px_120px_rgba(0,0,0,0.55),0_0_60px_rgba(200,169,126,0.08)] active:cursor-grabbing"
-                      : "cursor-pointer border-cinema-text/10 shadow-[0_24px_70px_rgba(0,0,0,0.42)]"
+                      ? "cursor-grab border-cinema-accent/40 bg-cinema-black/40 shadow-[0_40px_130px_rgba(0,0,0,0.6),0_0_70px_rgba(200,169,126,0.14)] ring-1 ring-inset ring-white/[0.06] backdrop-blur-xl active:cursor-grabbing"
+                      : "cursor-pointer border-cinema-text/10 shadow-[0_24px_70px_rgba(0,0,0,0.42)] backdrop-blur-md hover:border-cinema-accent/25"
                   )}
                   style={{
                     width: responsiveWidth,
@@ -266,10 +266,10 @@ export function CardStack<T extends CardStackItem>({
                   type="button"
                   onClick={() => setActive(index)}
                   className={cn(
-                    "h-1.5 rounded-full transition-all duration-300",
+                    "h-1.5 rounded-full transition-all duration-500",
                     selected
-                      ? "w-7 bg-cinema-accent"
-                      : "w-1.5 bg-cinema-text/20 hover:bg-cinema-text/45"
+                      ? "w-8 bg-cinema-accent shadow-[0_0_14px_rgba(200,169,126,0.55)]"
+                      : "w-1.5 bg-cinema-text/20 hover:w-2.5 hover:bg-cinema-text/50"
                   )}
                   aria-label={`Show ${item.title}`}
                   aria-current={selected ? "true" : undefined}

@@ -16,10 +16,10 @@ export const personalInfo: PersonalInfo = {
   bio: "Premium web design, Webflow, and SEO services to help your business stand out.",
   socials: {
     github: "https://github.com/arik",
-    linkedin: "https://linkedin.com/in/arik",
-    twitter: "https://twitter.com/arik",
+    linkedin: "https://www.linkedin.com/in/md-nasim-hossain-0a8a54172/",
+    twitter: "https://x.com/MdNasim89200917",
     instagram: "https://instagram.com/arik",
-    dribbble: "https://dribbble.com/arik",
+    dribbble: "https://dribbble.com/Nasim094",
     behance: "https://behance.net/arik",
   },
 };
@@ -122,14 +122,14 @@ export const testimonials: Testimonial[] = [
     name: "John Smith",
     role: "CEO, Google",
     quote:
-      "Amazing Results with Arik's Premium Web Design Services. Arik is a top-notch web designer who created a stunning website for my business. He was attentive to my needs and provided excellent customer service throughout the entire process.",
+      "Amazing Results with Nasim's Premium Web Design Services. Nasim is a top-notch web designer who created a stunning website for my business. He was attentive to my needs and provided excellent customer service throughout the entire process.",
   },
   {
     id: 2,
     name: "Sara Jones",
     role: "CEO, Webflow",
     quote:
-      "Working with Arik on my website was an incredible experience. Arik took the time to understand my unique vision and goals for the website and translated them into a beautiful, functional design.",
+      "Working with Nasim on my website was an incredible experience. Nasim took the time to understand my unique vision and goals for the website and translated them into a beautiful, functional design.",
     featured: true,
   },
   {
@@ -137,14 +137,14 @@ export const testimonials: Testimonial[] = [
     name: "John Anderson",
     role: "CEO, Intuit",
     quote:
-      "Professional, Collaborative Web Design Experience with Arik. I had the pleasure of working with Arik on a website development project and was blown away by the results.",
+      "Professional, Collaborative Web Design Experience with Nasim. I had the pleasure of working with Nasim on a website development project and was blown away by the results.",
   },
   {
     id: 4,
     name: "Sarah Johnson",
     role: "CEO, Relume",
     quote:
-      "Arik is an incredibly talented web designer who brings a unique perspective to every project. Arik's expertise in both design and development is truly impressive.",
+      "Nasim is an incredibly talented web designer who brings a unique perspective to every project. Nasim's expertise in both design and development is truly impressive.",
     featured: true,
   },
   {
@@ -152,14 +152,14 @@ export const testimonials: Testimonial[] = [
     name: "Mike Smith",
     role: "CEO, Sendlane",
     quote:
-      "Web Design and Content Solutions: Stand Out from the Crowd. Arik's web design and SEO services have helped my business thrive in the digital landscape.",
+      "Web Design and Content Solutions: Stand Out from the Crowd. Nasim's web design and SEO services have helped my business thrive in the digital landscape.",
   },
   {
     id: 6,
     name: "Jessica Lee",
     role: "CEO, Webflow",
     quote:
-      "Arik's SEO services have been a game-changer for my business. He has helped me improve my search engine rankings and drive more traffic to my website.",
+      "Nasim's SEO services have been a game-changer for my business. He has helped me improve my search engine rankings and drive more traffic to my website.",
     featured: true,
   },
 ];

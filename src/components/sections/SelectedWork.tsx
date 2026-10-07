@@ -245,7 +245,7 @@ export function SelectedWork() {
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
         >
           <motion.a
-            href="#work-grid"
+            href="#/works"
             data-cursor="view"
             whileHover={{ y: -3 }}
             whileTap={{ scale: 0.97 }}

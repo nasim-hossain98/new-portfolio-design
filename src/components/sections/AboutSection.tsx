@@ -6,7 +6,6 @@ import {
   useTransform,
 } from "framer-motion";
 import {
-  FaInstagram,
   FaXTwitter,
   FaDribbble,
   FaLinkedinIn,
@@ -19,7 +18,6 @@ import { useReducedMotion } from "../../hooks/useReducedMotion";
 import { easings } from "../../lib/utils";
 
 const SOCIALS: { label: string; icon: IconType; href: string }[] = [
-  { label: "Instagram", icon: FaInstagram, href: personalInfo.socials.instagram },
   { label: "Twitter", icon: FaXTwitter, href: personalInfo.socials.twitter },
   { label: "Dribbble", icon: FaDribbble, href: personalInfo.socials.dribbble },
   { label: "LinkedIn", icon: FaLinkedinIn, href: personalInfo.socials.linkedin },

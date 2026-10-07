@@ -1,8 +1,8 @@
 'use client';
 
 import type React from 'react';
-import { useRef, useMemo, useCallback, useState, useEffect } from 'react';
-import { Canvas, useFrame } from '@react-three/fiber';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { useTexture } from '@react-three/drei';
 import * as THREE from 'three';
 
@@ -60,6 +60,8 @@ interface PlaneData {
 	index: number;
 	z: number;
 	imageIndex: number;
+	/** Texture index currently bound to this plane's material (-1 = none yet) */
+	appliedIndex: number;
 	x: number;
 	y: number;
 }
@@ -86,25 +88,25 @@ const createClothMaterial = () => {
       uniform float isHovered;
       varying vec2 vUv;
       varying vec3 vNormal;
-      
+
       void main() {
         vUv = uv;
         vNormal = normal;
-        
+
         vec3 pos = position;
-        
+
         // Create smooth curving based on scroll force
         float curveIntensity = scrollForce * 0.3;
-        
+
         // Base curve across the plane based on distance from center
         float distanceFromCenter = length(pos.xy);
         float curve = distanceFromCenter * distanceFromCenter * curveIntensity;
-        
+
         // Add gentle cloth-like ripples
         float ripple1 = sin(pos.x * 2.0 + scrollForce * 3.0) * 0.02;
         float ripple2 = sin(pos.y * 2.5 + scrollForce * 2.0) * 0.015;
         float clothEffect = (ripple1 + ripple2) * abs(curveIntensity) * 2.0;
-        
+
         // Flag waving effect when hovered
         float flagWave = 0.0;
         if (isHovered > 0.5) {
@@ -114,15 +116,15 @@ const createClothMaterial = () => {
           // Damping effect - stronger wave on the right side (free edge)
           float dampening = smoothstep(-0.5, 0.5, pos.x);
           flagWave = waveAmplitude * dampening;
-          
+
           // Add secondary smaller waves for more realistic flag motion
           float secondaryWave = sin(pos.x * 5.0 + time * 12.0) * 0.03 * dampening;
           flagWave += secondaryWave;
         }
-        
+
         // Apply Z displacement for curving effect (inverted) with cloth ripples and flag wave
         pos.z -= (curve + clothEffect + flagWave);
-        
+
         gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
       }
     `,
@@ -133,18 +135,18 @@ const createClothMaterial = () => {
       uniform float scrollForce;
       varying vec2 vUv;
       varying vec3 vNormal;
-      
+
       void main() {
         vec4 color = texture2D(map, vUv);
-        
-        // Simple blur approximation
-        if (blurAmount > 0.0) {
+
+        // Blur approximation (3x3 kernel keeps the fill cost sane on weak GPUs)
+        if (blurAmount > 0.01) {
           vec2 texelSize = 1.0 / vec2(textureSize(map, 0));
           vec4 blurred = vec4(0.0);
           float total = 0.0;
-          
-          for (float x = -2.0; x <= 2.0; x += 1.0) {
-            for (float y = -2.0; y <= 2.0; y += 1.0) {
+
+          for (float x = -1.0; x <= 1.0; x += 1.0) {
+            for (float y = -1.0; y <= 1.0; y += 1.0) {
               vec2 offset = vec2(x, y) * texelSize * blurAmount;
               float weight = 1.0 / (1.0 + length(vec2(x, y)));
               blurred += texture2D(map, vUv + offset) * weight;
@@ -153,56 +155,16 @@ const createClothMaterial = () => {
           }
           color = blurred / total;
         }
-        
+
         // Add subtle lighting effect based on curving
         float curveHighlight = abs(scrollForce) * 0.05;
         color.rgb += vec3(curveHighlight * 0.1);
-        
+
         gl_FragColor = vec4(color.rgb, color.a * opacity);
       }
     `,
 	});
 };
-
-function ImagePlane({
-	texture,
-	position,
-	scale,
-	material,
-}: {
-	texture: THREE.Texture;
-	position: [number, number, number];
-	scale: [number, number, number];
-	material: THREE.ShaderMaterial;
-}) {
-	const meshRef = useRef<THREE.Mesh>(null);
-	const [isHovered, setIsHovered] = useState(false);
-
-	useEffect(() => {
-		if (material && texture) {
-			material.uniforms.map.value = texture;
-		}
-	}, [material, texture]);
-
-	useEffect(() => {
-		if (material && material.uniforms) {
-			material.uniforms.isHovered.value = isHovered ? 1.0 : 0.0;
-		}
-	}, [material, isHovered]);
-
-	return (
-		<mesh
-			ref={meshRef}
-			position={position}
-			scale={scale}
-			material={material}
-			onPointerEnter={() => setIsHovered(true)}
-			onPointerLeave={() => setIsHovered(false)}
-		>
-			<planeGeometry args={[1, 1, 32, 32]} />
-		</mesh>
-	);
-}
 
 function GalleryScene({
 	images,
@@ -218,9 +180,15 @@ function GalleryScene({
 		maxBlur: 3.0,
 	},
 }: Omit<InfiniteGalleryProps, 'className' | 'style'>) {
-	const [scrollVelocity, setScrollVelocity] = useState(0);
-	const [autoPlay, setAutoPlay] = useState(true);
+	const gl = useThree((state) => state.gl);
+
+	// All animation state lives in refs — mutating React state inside useFrame
+	// forces a full re-render every frame and can starve the GPU process.
+	const scrollVelocity = useRef(0);
+	const autoPlay = useRef(true);
 	const lastInteraction = useRef(Date.now());
+	const meshRefs = useRef<(THREE.Mesh | null)[]>([]);
+	const hoverFlags = useRef<boolean[]>([]);
 
 	// Normalize images to objects
 	const normalizedImages = useMemo(
@@ -231,14 +199,19 @@ function GalleryScene({
 		[images]
 	);
 
-	// Load textures
-	const textures = useTexture(normalizedImages.map((img) => img.src));
+	// Load textures (suspends until ready — the parent Suspense shows a loader)
+	const textures = useTexture(normalizedImages.map((img) => img.src)) as THREE.Texture[];
 
-	// Create materials pool
+	// Create materials pool and dispose on unmount
 	const materials = useMemo(
 		() => Array.from({ length: visibleCount }, () => createClothMaterial()),
 		[visibleCount]
 	);
+	useEffect(() => {
+		return () => {
+			materials.forEach((material) => material.dispose());
+		};
+	}, [materials]);
 
 	const spatialPositions = useMemo(() => {
 		const positions: { x: number; y: number }[] = [];
@@ -267,88 +240,99 @@ function GalleryScene({
 	const totalImages = normalizedImages.length;
 	const depthRange = DEFAULT_DEPTH_RANGE;
 
-	const planesData = useRef<PlaneData[]>(
-		Array.from({ length: visibleCount }, (_, i) => ({
-			index: i,
-			z: visibleCount > 0 ? ((depthRange / visibleCount) * i) % depthRange : 0,
-			imageIndex: totalImages > 0 ? i % totalImages : 0,
-			x: spatialPositions[i]?.x ?? 0,
-			y: spatialPositions[i]?.y ?? 0,
-		}))
+	const planesData = useMemo<PlaneData[]>(
+		() =>
+			Array.from({ length: visibleCount }, (_, i) => ({
+				index: i,
+				z: visibleCount > 0 ? ((depthRange / visibleCount) * i) % depthRange : 0,
+				imageIndex: totalImages > 0 ? i % totalImages : 0,
+				appliedIndex: -1,
+				x: spatialPositions[i]?.x ?? 0,
+				y: spatialPositions[i]?.y ?? 0,
+			})),
+		[depthRange, spatialPositions, totalImages, visibleCount]
 	);
 
+	// Wheel / touch / keyboard input drives the gallery.
+	// `data-lenis-prevent` on the wrapper keeps Lenis from stealing the wheel.
 	useEffect(() => {
-		planesData.current = Array.from({ length: visibleCount }, (_, i) => ({
-			index: i,
-			z:
-				visibleCount > 0
-					? ((depthRange / Math.max(visibleCount, 1)) * i) % depthRange
-					: 0,
-			imageIndex: totalImages > 0 ? i % totalImages : 0,
-			x: spatialPositions[i]?.x ?? 0,
-			y: spatialPositions[i]?.y ?? 0,
-		}));
-	}, [depthRange, spatialPositions, totalImages, visibleCount]);
-
-	const handleWheel = useCallback(
-		(event: WheelEvent) => {
-			event.preventDefault();
-			setScrollVelocity((prev) => prev + event.deltaY * 0.01 * speed);
-			setAutoPlay(false);
+		const el = gl.domElement;
+		const beginInteraction = () => {
+			autoPlay.current = false;
 			lastInteraction.current = Date.now();
-		},
-		[speed]
-	);
+		};
 
-	const handleKeyDown = useCallback(
-		(event: KeyboardEvent) => {
-			if (event.key === 'ArrowUp' || event.key === 'ArrowLeft') {
-				setScrollVelocity((prev) => prev - 2 * speed);
-				setAutoPlay(false);
-				lastInteraction.current = Date.now();
-			} else if (event.key === 'ArrowDown' || event.key === 'ArrowRight') {
-				setScrollVelocity((prev) => prev + 2 * speed);
-				setAutoPlay(false);
-				lastInteraction.current = Date.now();
-			}
-		},
-		[speed]
-	);
+		const handleWheel = (event: WheelEvent) => {
+			event.preventDefault();
+			scrollVelocity.current += event.deltaY * 0.01 * speed;
+			beginInteraction();
+		};
 
-	useEffect(() => {
-		const canvas = document.querySelector('canvas');
-		if (canvas) {
-			canvas.addEventListener('wheel', handleWheel, { passive: false });
-			document.addEventListener('keydown', handleKeyDown);
+		let lastTouchY = 0;
+		const handleTouchStart = (event: TouchEvent) => {
+			lastTouchY = event.touches[0]?.clientY ?? 0;
+		};
+		const handleTouchMove = (event: TouchEvent) => {
+			const y = event.touches[0]?.clientY;
+			if (y == null) return;
+			scrollVelocity.current += (lastTouchY - y) * 0.02 * speed;
+			lastTouchY = y;
+			beginInteraction();
+		};
 
-			return () => {
-				canvas.removeEventListener('wheel', handleWheel);
-				document.removeEventListener('keydown', handleKeyDown);
-			};
-		}
-	}, [handleWheel, handleKeyDown]);
+		const arrowKeys = new Set([
+			'ArrowUp',
+			'ArrowDown',
+			'ArrowLeft',
+			'ArrowRight',
+		]);
+		const handleKeyDown = (event: KeyboardEvent) => {
+			if (!arrowKeys.has(event.key)) return;
+			// Only capture the keys while the gallery fills a good part of the view
+			const rect = el.getBoundingClientRect();
+			const viewportH = window.innerHeight || 1;
+			const visibleRatio =
+				(Math.min(rect.bottom, viewportH) - Math.max(rect.top, 0)) / viewportH;
+			if (visibleRatio < 0.35) return;
+			event.preventDefault();
+			const direction =
+				event.key === 'ArrowUp' || event.key === 'ArrowLeft' ? -1 : 1;
+			scrollVelocity.current += direction * 2 * speed;
+			beginInteraction();
+		};
 
-	useEffect(() => {
-		const interval = setInterval(() => {
-			if (Date.now() - lastInteraction.current > 3000) {
-				setAutoPlay(true);
-			}
-		}, 1000);
-		return () => clearInterval(interval);
-	}, []);
+		el.addEventListener('wheel', handleWheel, { passive: false });
+		el.addEventListener('touchstart', handleTouchStart, { passive: true });
+		el.addEventListener('touchmove', handleTouchMove, { passive: true });
+		document.addEventListener('keydown', handleKeyDown);
+
+		return () => {
+			el.removeEventListener('wheel', handleWheel);
+			el.removeEventListener('touchstart', handleTouchStart);
+			el.removeEventListener('touchmove', handleTouchMove);
+			document.removeEventListener('keydown', handleKeyDown);
+		};
+	}, [gl, speed]);
+
+	if (hoverFlags.current.length !== visibleCount) {
+		hoverFlags.current = Array.from({ length: visibleCount }, () => false);
+	}
 
 	useFrame((state, delta) => {
-		if (autoPlay) {
-			setScrollVelocity((prev) => prev + 0.3 * delta);
+		if (Date.now() - lastInteraction.current > 3000) {
+			autoPlay.current = true;
 		}
-
-		setScrollVelocity((prev) => prev * 0.95);
+		if (autoPlay.current) {
+			scrollVelocity.current += 0.3 * delta;
+		}
+		scrollVelocity.current *= 0.95;
 
 		const time = state.clock.getElapsedTime();
+		const velocity = scrollVelocity.current;
 		materials.forEach((material) => {
-			if (material && material.uniforms) {
+			if (material?.uniforms) {
 				material.uniforms.time.value = time;
-				material.uniforms.scrollForce.value = scrollVelocity;
+				material.uniforms.scrollForce.value = velocity;
 			}
 		});
 
@@ -356,8 +340,8 @@ function GalleryScene({
 			totalImages > 0 ? visibleCount % totalImages || totalImages : 0;
 		const totalRange = depthRange;
 
-		planesData.current.forEach((plane, i) => {
-			let newZ = plane.z + scrollVelocity * delta * 10;
+		planesData.forEach((plane, i) => {
+			let newZ = plane.z + velocity * delta * 10;
 			let wrapsForward = 0;
 			let wrapsBackward = 0;
 
@@ -380,8 +364,6 @@ function GalleryScene({
 			}
 
 			plane.z = ((newZ % totalRange) + totalRange) % totalRange;
-			plane.x = spatialPositions[i]?.x ?? 0;
-			plane.y = spatialPositions[i]?.y ?? 0;
 
 			const normalizedPosition = plane.z / totalRange;
 			let opacity = 1;
@@ -437,39 +419,64 @@ function GalleryScene({
 			blur = Math.max(0, Math.min(blurSettings.maxBlur, blur));
 
 			const material = materials[i];
-			if (material && material.uniforms) {
+			if (material?.uniforms) {
 				material.uniforms.opacity.value = opacity;
 				material.uniforms.blurAmount.value = blur;
+				material.uniforms.isHovered.value = hoverFlags.current[i] ? 1 : 0;
+			}
+
+			// Apply transforms imperatively — no React render involved.
+			const mesh = meshRefs.current[i];
+			if (!mesh) return;
+			// Skip fragment work for fully transparent planes (they still cost fill rate)
+			mesh.visible = opacity > 0.01;
+			if (!mesh.visible) return;
+
+			mesh.position.set(plane.x, plane.y, plane.z - totalRange / 2);
+
+			if (plane.imageIndex !== plane.appliedIndex) {
+				plane.appliedIndex = plane.imageIndex;
+				const texture = textures[plane.imageIndex];
+				if (texture && material) {
+					material.uniforms.map.value = texture;
+					const img = texture.image as { width?: number; height?: number } | null;
+					const aspect =
+						img && img.width ? img.width / (img.height || 1) : 1;
+					mesh.scale.set(
+						aspect > 1 ? 2 * aspect : 2,
+						aspect > 1 ? 2 : 2 / aspect,
+						1
+					);
+				}
 			}
 		});
 	});
 
-	if (normalizedImages.length === 0) return null;
+	if (totalImages === 0) return null;
 
 	return (
 		<>
-			{planesData.current.map((plane, i) => {
-				const texture = textures[plane.imageIndex];
+			{planesData.map((plane, i) => {
 				const material = materials[i];
-
-				if (!texture || !material) return null;
-
-				const worldZ = plane.z - depthRange / 2;
-
-				const img = texture.image as { width: number; height: number } | null;
-				const aspect =
-					img && img.width > 0 ? img.width / img.height : 1;
-				const scale: [number, number, number] =
-					aspect > 1 ? [2 * aspect, 2, 1] : [2, 2 / aspect, 1];
+				if (!material) return null;
 
 				return (
-					<ImagePlane
+					<mesh
 						key={plane.index}
-						texture={texture}
-						position={[plane.x, plane.y, worldZ]}
-						scale={scale}
+						ref={(m) => {
+							meshRefs.current[i] = m;
+						}}
+						position={[plane.x, plane.y, plane.z - depthRange / 2]}
 						material={material}
-					/>
+						onPointerEnter={() => {
+							hoverFlags.current[i] = true;
+						}}
+						onPointerLeave={() => {
+							hoverFlags.current[i] = false;
+						}}
+					>
+						<planeGeometry args={[1, 1, 32, 32]} />
+					</mesh>
 				);
 			})}
 		</>
@@ -534,6 +541,19 @@ export default function InfiniteGallery({
 	},
 }: InfiniteGalleryProps) {
 	const [webglSupported] = useState(detectWebGL);
+	// If the GPU process drops the context (driver reset, software-GL watchdog,
+	// context cap...), remount the Canvas once to get a fresh one instead of
+	// leaving a dead white rectangle on the page.
+	const [canvasKey, setCanvasKey] = useState(0);
+	const recoveryCount = useRef(0);
+
+	const handleContextLost = useCallback((event: Event) => {
+		event.preventDefault();
+		if (recoveryCount.current < 5) {
+			recoveryCount.current += 1;
+			setCanvasKey((key) => key + 1);
+		}
+	}, []);
 
 	if (!webglSupported) {
 		return (
@@ -544,10 +564,15 @@ export default function InfiniteGallery({
 	}
 
 	return (
-		<div className={className} style={style}>
+		<div className={className} style={style} data-lenis-prevent>
 			<Canvas
+				key={canvasKey}
 				camera={{ position: [0, 0, 0], fov: 55 }}
-				gl={{ antialias: true, alpha: true }}
+				gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
+				dpr={[1, 2]}
+				onCreated={({ gl }) => {
+					gl.domElement.addEventListener('webglcontextlost', handleContextLost);
+				}}
 			>
 				<GalleryScene
 					images={images}

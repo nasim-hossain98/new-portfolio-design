@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { useScrollProgress } from "../../hooks/useScrollProgress";
 import { useSmoothScroll } from "./SmoothScroll";
+import { navigate, useRoute } from "../../lib/router";
 import { useReducedMotion } from "../../hooks/useReducedMotion";
 import { easings, cn } from "../../lib/utils";
 import type { NavItem } from "../../types";
@@ -33,6 +34,7 @@ export function Navbar() {
   const [active, setActive] = useState("home");
   const { scrollY } = useScrollProgress();
   const { lenis, scrollTo } = useSmoothScroll();
+  const route = useRoute();
   const reduced = useReducedMotion();
 
   const overlayRef = useRef<HTMLDivElement | null>(null);
@@ -43,6 +45,11 @@ export function Navbar() {
 
   /* scroll-spy — piggyback on the throttled scroll progress updates */
   useEffect(() => {
+    if (route !== "home") {
+      setActive("");
+      return;
+    }
+
     const probe = scrollY + window.innerHeight * 0.35;
     let current = SECTION_IDS[0];
     for (const id of SECTION_IDS) {
@@ -50,7 +57,7 @@ export function Navbar() {
       if (el && el.offsetTop <= probe) current = id;
     }
     setActive(current);
-  }, [scrollY]);
+  }, [scrollY, route]);
 
   /* Escape closes; Tab is trapped inside the open menu */
   useEffect(() => {
@@ -104,6 +111,11 @@ export function Navbar() {
 
   const go = (href: string) => {
     setOpen(false);
+    // From the All Works route, head home first and scroll once it mounts.
+    if (route !== "home") {
+      navigate("home", href);
+      return;
+    }
     scrollTo(href);
   };
 

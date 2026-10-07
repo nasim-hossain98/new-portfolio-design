@@ -105,32 +105,40 @@ export function CinematicHero({
       gsap.set(".opening-accent", { autoAlpha: 1, clipPath: "inset(0 100% 0 0)" });
       gsap.set(".main-card", { y: window.innerHeight + 200, autoAlpha: 1 });
       gsap.set([".card-copy", ".card-brand", ".device-wrapper", ".floating-badge", ".portrait-detail"], { autoAlpha: 0 });
-      gsap.set(".closing-cta", { autoAlpha: 0, scale: 0.8, filter: "blur(30px)" });
+      gsap.set(".closing-cta", { autoAlpha: 0, scale: 0.8, filter: "blur(18px)" });
 
       gsap.timeline({ delay: 0.3 })
-        .to(".opening-line", { duration: 1.8, autoAlpha: 1, y: 0, scale: 1, filter: "blur(0px)", rotationX: 0, ease: "expo.out" })
+        .to(".opening-line", { duration: 1.6, autoAlpha: 1, y: 0, scale: 1, filter: "blur(0px)", rotationX: 0, ease: "expo.out" })
         .to(".opening-accent", { duration: 1.4, clipPath: "inset(0 0% 0 0)", ease: "power4.inOut" }, "-=1");
 
       const mobile = window.innerWidth < 768;
       gsap.timeline({
-        scrollTrigger: { trigger: root, start: "top top", end: "+=7000", pin: true, scrub: 1, anticipatePin: 1, invalidateOnRefresh: true },
+        scrollTrigger: {
+          trigger: root,
+          start: "top top",
+          end: () => `+=${Math.round(window.innerHeight * (window.innerWidth < 768 ? 3.4 : 4.2))}`,
+          pin: true,
+          scrub: 0.5,
+          anticipatePin: 1,
+          invalidateOnRefresh: true,
+        },
       })
-        .to([".opening-copy", ".hero-grid"], { scale: 1.15, filter: "blur(20px)", opacity: 0.15, ease: "power2.inOut", duration: 2 }, 0)
-        .to(".main-card", { y: 0, ease: "power3.inOut", duration: 2 }, 0)
+        .to([".opening-copy", ".hero-grid"], { scale: 1.12, filter: "blur(10px)", opacity: 0.15, ease: "power2.inOut", duration: 1.8 }, 0)
+        .to(".main-card", { y: 0, ease: "power3.inOut", duration: 1.8 }, 0)
         .to(".main-card", { width: "100%", height: "100%", borderRadius: 0, ease: "power3.inOut", duration: 1.5 })
         .fromTo(".device-wrapper", { y: 300, z: -500, rotationX: 50, rotationY: -30, autoAlpha: 0, scale: 0.6 }, { y: 0, z: 0, rotationX: 0, rotationY: 0, autoAlpha: 1, scale: 1, ease: "expo.out", duration: 2.5 }, "-=.8")
         .fromTo(".portrait-detail", { y: 30, autoAlpha: 0 }, { y: 0, autoAlpha: 1, stagger: 0.12, ease: "power3.out", duration: 1.3 }, "-=1.5")
         .fromTo(".floating-badge", { y: 100, autoAlpha: 0, scale: 0.7, rotationZ: -10 }, { y: 0, autoAlpha: 1, scale: 1, rotationZ: 0, stagger: 0.2, ease: "back.out(1.5)", duration: 1.5 }, "-=2")
         .fromTo(".card-copy", { x: -50, autoAlpha: 0 }, { x: 0, autoAlpha: 1, ease: "power4.out", duration: 1.5 }, "-=1.5")
         .fromTo(".card-brand", { x: 50, autoAlpha: 0, scale: 0.8 }, { x: 0, autoAlpha: 1, scale: 1, ease: "expo.out", duration: 1.5 }, "<")
-        .to({}, { duration: 2.5 })
+        .to({}, { duration: 1.2 })
         .set(".opening-copy", { autoAlpha: 0 })
         .set(".closing-cta", { autoAlpha: 1 })
-        .to({}, { duration: 1.5 })
-        .to([".device-wrapper", ".floating-badge", ".card-copy", ".card-brand"], { scale: 0.9, y: -40, z: -200, autoAlpha: 0, ease: "power3.in", duration: 1.2, stagger: 0.05 })
-        .to(".main-card", { width: mobile ? "92vw" : "85vw", height: mobile ? "92vh" : "85vh", borderRadius: mobile ? 32 : 40, ease: "expo.inOut", duration: 1.8 }, "pullback")
-        .to(".closing-cta", { scale: 1, filter: "blur(0px)", ease: "expo.inOut", duration: 1.8 }, "pullback")
-        .to(".main-card", { y: -window.innerHeight - 300, ease: "power3.in", duration: 1.5 });
+        .to({}, { duration: 0.6 })
+        .to([".device-wrapper", ".floating-badge", ".card-copy", ".card-brand"], { scale: 0.9, y: -40, z: -200, autoAlpha: 0, ease: "power3.in", duration: 1, stagger: 0.05 })
+        .to(".main-card", { width: mobile ? "92vw" : "85vw", height: mobile ? "92vh" : "85vh", borderRadius: mobile ? 32 : 40, ease: "expo.inOut", duration: 1.5 }, "pullback")
+        .to(".closing-cta", { scale: 1, filter: "blur(0px)", ease: "expo.inOut", duration: 1.5 }, "pullback")
+        .to(".main-card", { y: -window.innerHeight - 300, ease: "power3.in", duration: 1.2 });
     }, root);
     return () => ctx.revert();
   }, [metricValue]);

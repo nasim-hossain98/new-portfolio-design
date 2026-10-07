@@ -1,15 +1,15 @@
 import { motion } from "framer-motion";
 import { ArrowUp, ArrowUpRight } from "lucide-react";
-import { FaInstagram, FaXTwitter, FaDribbble } from "react-icons/fa6";
+import { FaXTwitter, FaDribbble } from "react-icons/fa6";
 import type { IconType } from "react-icons";
 import { personalInfo } from "../../data/portfolioData";
 import { MagneticButton } from "../ui/MagneticButton";
 import { useInViewAnimation } from "../../hooks/useInViewAnimation";
 import { useSmoothScroll } from "./SmoothScroll";
+import { navigate, useRoute } from "../../lib/router";
 import { easings, cn } from "../../lib/utils";
 
 const SOCIALS: { label: string; icon: IconType; href: string }[] = [
-  { label: "Instagram", icon: FaInstagram, href: personalInfo.socials.instagram },
   { label: "Twitter", icon: FaXTwitter, href: personalInfo.socials.twitter },
   { label: "Dribbble", icon: FaDribbble, href: personalInfo.socials.dribbble },
 ];
@@ -19,12 +19,22 @@ const RESOURCES = ["Style Guide", "Licensing", "Changelog"];
 
 export function Footer() {
   const { scrollTo } = useSmoothScroll();
+  const route = useRoute();
   const { ref, controls } = useInViewAnimation<HTMLDivElement>({
     amount: 0.2,
     variantsMode: true,
   });
 
   const year = new Date().getFullYear();
+
+  /** Section links work from any route — they hop home first when needed. */
+  const goToSection = (href: string) => {
+    if (route !== "home") {
+      navigate("home", href);
+      return;
+    }
+    scrollTo(href);
+  };
 
   return (
     <footer className="relative z-10 border-t border-cinema-text/10 bg-cinema-black">
@@ -107,7 +117,7 @@ export function Footer() {
             {PAGES.map((page) => (
               <li key={page}>
                 <button
-                  onClick={() => scrollTo(`#${page.toLowerCase()}`)}
+                  onClick={() => goToSection(`#${page.toLowerCase()}`)}
                   className="label group relative text-cinema-text/70 transition-colors hover:text-cinema-accent"
                 >
                   {page}
@@ -154,7 +164,7 @@ export function Footer() {
           </a>
           <MagneticButton
             variant="outline"
-            onClick={() => scrollTo("#home")}
+            onClick={() => goToSection("#home")}
             className="mt-2"
           >
             To top <ArrowUp size={14} />

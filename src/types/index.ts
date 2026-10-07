@@ -14,7 +14,6 @@ export type SocialPlatform =
   | "github"
   | "linkedin"
   | "twitter"
-  | "instagram"
   | "dribbble"
   | "behance";
 

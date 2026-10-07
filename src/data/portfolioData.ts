@@ -18,7 +18,6 @@ export const personalInfo: PersonalInfo = {
     github: "https://github.com/arik",
     linkedin: "https://www.linkedin.com/in/md-nasim-hossain-0a8a54172/",
     twitter: "https://x.com/MdNasim89200917",
-    instagram: "https://instagram.com/arik",
     dribbble: "https://dribbble.com/Nasim094",
     behance: "https://behance.net/arik",
   },

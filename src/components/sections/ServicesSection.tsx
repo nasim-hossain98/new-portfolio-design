@@ -137,7 +137,7 @@ export function ServicesSection() {
           </h2>
 
           <motion.p
-            className="mt-6 max-w-md font-display text-sm leading-relaxed text-cinema-muted"
+            className="mt-6 max-w-lg font-display text-base leading-relaxed text-cinema-text/80 md:text-lg"
             initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.5 }}
@@ -384,7 +384,7 @@ function ServiceRow({
         >
           <motion.p
             variants={panelItem}
-            className="border-l border-cinema-accent/25 pl-4 font-display text-sm leading-relaxed text-cinema-muted md:col-span-6 md:col-start-3 md:pl-5"
+            className="border-l border-cinema-accent/25 pl-4 font-display text-base leading-relaxed text-cinema-text/80 md:col-span-6 md:col-start-3 md:pl-5 md:text-lg"
           >
             {service.description}
           </motion.p>
@@ -394,14 +394,14 @@ function ServiceRow({
               variants={panelItem}
               className="md:col-span-3 md:col-start-10"
             >
-              <p className="font-display text-[10px] uppercase tracking-[0.25em] text-cinema-muted/70">
+              <p className="font-display text-xs uppercase tracking-[0.25em] text-cinema-muted">
                 Key deliverables
               </p>
               <ul className="mt-4 flex flex-wrap gap-2">
                 {service.tags.map((tag) => (
                   <li
                     key={tag}
-                    className="rounded-pill border border-cinema-muted/20 px-3.5 py-1.5 font-display text-[10px] uppercase tracking-[0.18em] text-cinema-muted transition-colors duration-300 hover:border-cinema-accent/45 hover:text-cinema-text"
+                    className="rounded-pill border border-cinema-muted/25 px-4 py-2 font-display text-xs uppercase tracking-[0.15em] text-cinema-muted/90 transition-colors duration-300 hover:border-cinema-accent/45 hover:text-cinema-text"
                   >
                     {tag}
                   </li>
@@ -413,7 +413,7 @@ function ServiceRow({
           <motion.a
             variants={panelItem}
             href={service.link}
-            className="group/link inline-flex w-fit items-center gap-2 font-display text-[11px] uppercase tracking-[0.2em] text-cinema-accent transition-colors duration-300 hover:text-cinema-text focus-visible:text-cinema-text focus-visible:outline-none md:col-span-6 md:col-start-3"
+            className="group/link inline-flex w-fit items-center gap-2 font-display text-xs uppercase tracking-[0.2em] text-cinema-accent transition-colors duration-300 hover:text-cinema-text focus-visible:text-cinema-text focus-visible:outline-none md:col-span-6 md:col-start-3 md:text-sm"
           >
             <span className="relative">
               {service.linkText.toUpperCase()}

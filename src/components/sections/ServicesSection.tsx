@@ -24,10 +24,10 @@ const HEADLINE: { text: string; accent?: boolean }[] = [
   { text: "Services" },
   { text: "built" },
   { text: "to" },
-  { text: "make" },
+  { text: "ship" },
   { text: "your" },
-  { text: "brand" },
-  { text: "unmistakable", accent: true },
+  { text: "product" },
+  { text: "end-to-end", accent: true },
 ];
 
 /** Index of the accordion panel open on first view (Development) */
@@ -143,8 +143,8 @@ export function ServicesSection() {
             viewport={{ once: true, amount: 0.5 }}
             transition={{ duration: 0.7, ease: easings.cinematic, delay: 0.15 }}
           >
-            Three disciplines, one goal: a web presence that feels like your brand and
-            performs like your best salesperson.
+            Three disciplines, one goal: a product that works flawlessly from the
+            first click to the database.
           </motion.p>
         </div>
 

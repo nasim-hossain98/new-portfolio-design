@@ -9,11 +9,11 @@ import type {
 
 export const personalInfo: PersonalInfo = {
   name: "Mohammad Nasim",
-  title: "UI/UX Design & Frontend Design",
+  title: "Full Stack Developer",
   email: "nasimhossain105@gmail.com",
   phone: "+1 234 567 890",
   location: "Remote / Worldwide",
-  bio: "Premium web design, Webflow, and SEO services to help your business stand out.",
+  bio: "I build end-to-end web applications — React frontends, robust APIs, databases, and reliable cloud deployment.",
   socials: {
     github: "https://github.com/arik",
     linkedin: "https://www.linkedin.com/in/md-nasim-hossain-0a8a54172/",
@@ -27,40 +27,40 @@ export const services: Service[] = [
   {
     id: 1,
     number: "01",
-    title: "Web Design",
+    title: "Frontend Development",
     description:
-      "Visually stunning web designs that captivate your audience by blending your brand voice and customer needs.",
+      "Fast, accessible interfaces built with React and TypeScript — responsive layouts, clean state management, and pixel-precise components that scale with your product.",
     link: "#services",
-    linkText: "About Webdesign",
-    tags: ["UX Design", "Wireframe", "Interactive Prototype", "Responsive Design"],
+    linkText: "About frontend",
+    tags: ["React", "TypeScript", "Tailwind CSS", "Responsive UI"],
   },
   {
     id: 2,
     number: "02",
-    title: "Development",
+    title: "Backend & APIs",
     description:
-      "Get custom web development solutions that are tailored to your specifications, designed to deliver a flawless user experience.",
+      "Well-structured server logic, databases, and APIs that keep your product secure, consistent, and ready for real traffic.",
     link: "#services",
-    linkText: "About Webflow",
-    tags: ["Custom Development", "Responsive Frontend", "CMS Integration", "Motion & Animation"],
+    linkText: "About backend",
+    tags: ["Node.js", "REST & GraphQL", "PostgreSQL", "Authentication"],
   },
   {
     id: 3,
     number: "03",
-    title: "Content & SEO",
+    title: "Deployment & DevOps",
     description:
-      "Proven SEO strategies that enhance your online performance, bringing you to the forefront of organic search results.",
+      "From CI/CD pipelines to monitoring and backups — I ship your application to production and keep it running reliably.",
     link: "#services",
-    linkText: "About SEO",
-    tags: ["Keyword Research", "On-page SEO", "Content Strategy", "Performance Tracking"],
+    linkText: "About DevOps",
+    tags: ["AWS", "CI/CD", "Docker", "Monitoring"],
   },
 ];
 
 export const projects: Project[] = [
-  { id: 1, title: "Taskez", category: "Webdesign", image: "/project1.jpg", year: "2025" },
-  { id: 2, title: "Magnum AI", category: "Webdesign", image: "/project2.jpg", year: "2025" },
-  { id: 3, title: "Last.fm", category: "Webdesign", image: "/project3.jpg", year: "2024" },
-  { id: 4, title: "Cola", category: "Webdesign", image: "/project4.jpg", year: "2024" },
+  { id: 1, title: "Taskez", category: "Full Stack", image: "/project1.jpg", year: "2025" },
+  { id: 2, title: "Magnum AI", category: "Full Stack", image: "/project2.jpg", year: "2025" },
+  { id: 3, title: "Last.fm", category: "Full Stack", image: "/project3.jpg", year: "2024" },
+  { id: 4, title: "Cola", category: "Full Stack", image: "/project4.jpg", year: "2024" },
 ];
 
 export const processSteps: ProcessStep[] = [
@@ -70,48 +70,48 @@ export const processSteps: ProcessStep[] = [
     title: "Discovery Call",
     time: "(1 Hour)",
     description:
-      "Before we start, we determine if and how I can help you. What do you need assistance with and what goals do you have for your website?",
+      "Before we start, we determine if and how I can help you. What do you need built, and what goals do you have for your product?",
     points: [
       "We get to know each other better",
       "Determine how I can best assist you",
-      "Understand the goals you have for your website",
+      "Understand the goals you have for your product",
     ],
   },
   {
     id: 2,
     number: "02",
-    title: "Concept & Strategy",
+    title: "Architecture & Strategy",
     time: "(1 Week)",
     description:
-      "Together, we develop a strategy that successfully combines your goals and brand voice. I also present the wireframes with an interactive structure.",
-    points: ["UX Design", "Wireframe", "Interactive Prototype"],
+      "Together, we map the product into a technical plan — data models, API contracts, and the features that matter most for the first release.",
+    points: ["Requirement mapping", "System architecture", "API & data design"],
   },
   {
     id: 3,
     number: "03",
-    title: "Web Design",
+    title: "Frontend Development",
     time: "(2 Weeks)",
     description:
-      "Now utilizes the magic. Based on the previously developed concept, I create a high-end, unique web presence for your brand. It will feel like your brand and shine like your brand.",
-    points: ["High-end web design tailored to your brand", "Interactive prototype of the design"],
+      "Now the product takes shape. I build responsive, accessible interfaces with reusable components, so every screen stays consistent as the app grows.",
+    points: ["Responsive, accessible UI", "Reusable component system"],
   },
   {
     id: 4,
     number: "04",
-    title: "Development",
+    title: "Backend Development",
     time: "(2 Weeks)",
     description:
-      "In this step, we breathe life into your new high-end web presence. I will develop your web presence with the best web design system CMS integration.",
-    points: ["Custom hand-written website", "Modular web design system", "CMS integration"],
+      "I connect the product to a solid backend — secure APIs, a well-modelled database, and authentication and authorization that hold up in production.",
+    points: ["REST & GraphQL APIs", "Database schema & queries", "Authentication & authorization"],
   },
   {
     id: 5,
     number: "05",
-    title: "Website Onboarding",
+    title: "Launch & Handover",
     time: "(2 Hours)",
     description:
-      "In a personal 1-hour workshop, I will show you how to make changes to your new website quickly and easily. Additionally, you will receive personalized video tutorials.",
-    points: ["Personal Workshop", "Personalized video tutorials", "CMS and plugin presets on your website"],
+      "We ship it. I set up deployment, walk you through the codebase, and hand over documentation so your team can maintain and extend the product confidently.",
+    points: ["Deployment & CI/CD", "Code walkthrough & docs", "Monitoring and backups"],
   },
 ];
 
@@ -121,14 +121,14 @@ export const testimonials: Testimonial[] = [
     name: "John Smith",
     role: "CEO, Google",
     quote:
-      "Amazing Results with Nasim's Premium Web Design Services. Nasim is a top-notch web designer who created a stunning website for my business. He was attentive to my needs and provided excellent customer service throughout the entire process.",
+      "Amazing results with Nasim's full stack development. Nasim is a top-notch engineer who built a fast, reliable application for my business. He was attentive to my needs and provided excellent communication throughout the entire process.",
   },
   {
     id: 2,
     name: "Sara Jones",
     role: "CEO, Webflow",
     quote:
-      "Working with Nasim on my website was an incredible experience. Nasim took the time to understand my unique vision and goals for the website and translated them into a beautiful, functional design.",
+      "Working with Nasim on our platform was an incredible experience. Nasim took the time to understand our requirements and turned them into a clean, scalable architecture that our team can actually maintain.",
     featured: true,
   },
   {
@@ -136,14 +136,14 @@ export const testimonials: Testimonial[] = [
     name: "John Anderson",
     role: "CEO, Intuit",
     quote:
-      "Professional, Collaborative Web Design Experience with Nasim. I had the pleasure of working with Nasim on a website development project and was blown away by the results.",
+      "Professional, collaborative engineering experience with Nasim. I had the pleasure of working with Nasim on a full stack build and was blown away by how smoothly the frontend, API, and database came together.",
   },
   {
     id: 4,
     name: "Sarah Johnson",
     role: "CEO, Relume",
     quote:
-      "Nasim is an incredibly talented web designer who brings a unique perspective to every project. Nasim's expertise in both design and development is truly impressive.",
+      "Nasim is an incredibly talented full stack developer who brings a unique perspective to every project. His expertise across frontend, backend, and deployment is truly impressive.",
     featured: true,
   },
   {
@@ -151,14 +151,14 @@ export const testimonials: Testimonial[] = [
     name: "Mike Smith",
     role: "CEO, Sendlane",
     quote:
-      "Web Design and Content Solutions: Stand Out from the Crowd. Nasim's web design and SEO services have helped my business thrive in the digital landscape.",
+      "Full stack delivery that stands out from the crowd. Nasim's engineering and API work helped my business launch faster and scale without the usual technical headaches.",
   },
   {
     id: 6,
     name: "Jessica Lee",
     role: "CEO, Webflow",
     quote:
-      "Nasim's SEO services have been a game-changer for my business. He has helped me improve my search engine rankings and drive more traffic to my website.",
+      "Nasim's full stack work has been a game-changer for my business. He rebuilt our backend, improved load times dramatically, and gave us a codebase we can confidently build on.",
     featured: true,
   },
 ];

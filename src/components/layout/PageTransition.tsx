@@ -54,7 +54,7 @@ export function PageTransition({ children, pageKey = "home" }: PageTransitionPro
               exit={{ opacity: 0 }}
               transition={{ duration: 0.5, delay: 0.15 }}
             >
-              Nasim Hossain — UI/UX &amp; Frontend
+              Nasim Hossain — Full Stack Developer
             </motion.span>
           </motion.div>
         )}

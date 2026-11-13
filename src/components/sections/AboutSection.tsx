@@ -24,9 +24,9 @@ const SOCIALS: { label: string; icon: IconType; href: string }[] = [
 ];
 
 const STATS = [
-  { value: "05+", label: "Years crafting" },
+  { value: "05+", label: "Years building" },
   { value: "40+", label: "Projects shipped" },
-  { value: "100%", label: "Built with care" },
+  { value: "100%", label: "End-to-end" },
 ];
 
 export function AboutSection() {
@@ -162,7 +162,7 @@ export function AboutSection() {
                 <div className="absolute inset-0 bg-gradient-to-t from-cinema-black via-cinema-black/5 to-transparent" />
                 <div className="absolute inset-0 bg-cinema-accent/[0.04] mix-blend-color" />
                 <div className="absolute inset-x-0 bottom-0 p-7 md:p-8">
-                  <p className="label mb-2 text-cinema-accent">Designer · Developer</p>
+                  <p className="label mb-2 text-cinema-accent">Full Stack Developer</p>
                   <p className="font-display text-3xl leading-none text-cinema-text">
                     Mohammad Nasim
                   </p>
@@ -253,18 +253,19 @@ export function AboutSection() {
               align="left"
               className="mb-8 max-w-xl pr-10"
               label="Behind the pixels"
-              title="I shape ideas into"
-              accent="digital experiences."
+              title="I turn ideas into"
+              accent="shipped products."
             />
 
             <div className="grid gap-5 text-sm leading-[1.9] text-cinema-muted sm:grid-cols-2">
               <p>
-                I'm {personalInfo.name}, a freelance web designer and developer with over
-                five years of experience creating expressive, high-performing websites.
+                I'm {personalInfo.name}, a freelance full stack developer with over
+                five years of experience building scalable, high-performing web
+                applications.
               </p>
               <p>
-                I blend thoughtful UX, distinctive visual direction, and clean development
-                to build digital work that feels as good as it functions.
+                I work across the stack — React interfaces, APIs, and databases —
+                to build products that are fast, reliable, and easy to maintain.
               </p>
             </div>
 

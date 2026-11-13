@@ -10,8 +10,8 @@ const STYLES = `
   .cinematic-hero .gsap-reveal { visibility: hidden; }
   .cinematic-hero .film-grain { position:absolute; inset:0; pointer-events:none; z-index:50; opacity:.05; mix-blend-mode:overlay; background:url('data:image/svg+xml;utf8,<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><filter id="noiseFilter"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23noiseFilter)"/></svg>'); }
   .cinematic-hero .hero-grid { background-size:60px 60px; background-image:linear-gradient(to right,rgba(240,240,245,.055) 1px,transparent 1px),linear-gradient(to bottom,rgba(240,240,245,.055) 1px,transparent 1px); mask-image:radial-gradient(ellipse at center,#000 0%,transparent 70%); }
-  .cinematic-hero .text-matte { color:#f0f0f5; text-shadow:0 10px 30px rgba(240,240,245,.16),0 2px 4px rgba(240,240,245,.08); }
-  .cinematic-hero .text-silver { background:linear-gradient(180deg,#fff 0%,#70707e 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; filter:drop-shadow(0 10px 20px rgba(0,0,0,.35)); transform:translateZ(0); }
+  .cinematic-hero .text-matte { color:#fff; text-shadow:0 2px 10px rgba(0,0,0,.55); }
+  .cinematic-hero .text-silver { color:#fff; background:linear-gradient(180deg,#fff 0%,#e4e4e9 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; filter:drop-shadow(0 2px 10px rgba(0,0,0,.55)); transform:translateZ(0); }
   .cinematic-hero .card-silver { background:linear-gradient(180deg,#fff 0%,#a1a1aa 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; filter:drop-shadow(0 12px 24px rgba(0,0,0,.8)); transform:translateZ(0); }
   .cinematic-hero .depth-card { background:linear-gradient(145deg,#18243e 0%,#090b11 62%,#08090d 100%); box-shadow:0 40px 100px -20px rgba(0,0,0,.9),0 20px 40px -20px rgba(0,0,0,.8),inset 0 1px 2px rgba(255,255,255,.18),inset 0 -2px 4px rgba(0,0,0,.8); border:1px solid rgba(255,255,255,.06); }
   .cinematic-hero .card-sheen { position:absolute; inset:0; border-radius:inherit; pointer-events:none; z-index:50; background:radial-gradient(800px circle at var(--mouse-x,50%) var(--mouse-y,50%),rgba(167,139,250,.12),transparent 42%); mix-blend-mode:screen; }
@@ -48,14 +48,14 @@ export interface CinematicHeroProps extends HTMLAttributes<HTMLElement> {
 
 export function CinematicHero({
   brandName = "Nasim",
-  tagline1 = "Designing digital,",
-  tagline2 = "experiences with depth.",
-  cardHeading = "Ideas, made tangible.",
-  cardDescription = <>I combine thoughtful <strong className="font-semibold text-white">UI/UX design</strong> with precise frontend development to create expressive, high-performing digital experiences.</>,
+  tagline1 = "Engineering products,",
+  tagline2 = "from database to UI.",
+  cardHeading = "Full-stack, end to end.",
+  cardDescription = <>I build and ship <strong className="font-semibold text-white">full-stack applications</strong> — from API architecture and databases to fast, accessible interfaces and deployment.</>,
   metricValue = 40,
   metricLabel = "Projects shipped",
-  ctaHeading = "Let’s make something remarkable.",
-  ctaDescription = "Have an ambitious idea? Let’s turn it into a focused, memorable digital experience.",
+  ctaHeading = "Let’s ship something that scales.",
+  ctaDescription = "Have a product idea or a system that needs building? Let’s turn it into a reliable, well-architected application.",
   className,
   ...props
 }: CinematicHeroProps) {
@@ -123,7 +123,7 @@ export function CinematicHero({
           invalidateOnRefresh: true,
         },
       })
-        .to([".opening-copy", ".hero-grid"], { scale: 1.12, filter: "blur(10px)", opacity: 0.15, ease: "power2.inOut", duration: 1.8 }, 0)
+        .to([".opening-copy", ".hero-grid"], { scale: 1.06, opacity: 0, ease: "power2.in", duration: 1.8 }, 0)
         .to(".main-card", { y: 0, ease: "power3.inOut", duration: 1.8 }, 0)
         .to(".main-card", { width: "100%", height: "100%", borderRadius: 0, ease: "power3.inOut", duration: 1.5 })
         .fromTo(".device-wrapper", { y: 300, z: -500, rotationX: 50, rotationY: -30, autoAlpha: 0, scale: 0.6 }, { y: 0, z: 0, rotationX: 0, rotationY: 0, autoAlpha: 1, scale: 1, ease: "expo.out", duration: 2.5 }, "-=.8")
@@ -132,7 +132,6 @@ export function CinematicHero({
         .fromTo(".card-copy", { x: -50, autoAlpha: 0 }, { x: 0, autoAlpha: 1, ease: "power4.out", duration: 1.5 }, "-=1.5")
         .fromTo(".card-brand", { x: 50, autoAlpha: 0, scale: 0.8 }, { x: 0, autoAlpha: 1, scale: 1, ease: "expo.out", duration: 1.5 }, "<")
         .to({}, { duration: 1.2 })
-        .set(".opening-copy", { autoAlpha: 0 })
         .set(".closing-cta", { autoAlpha: 1 })
         .to({}, { duration: 0.6 })
         .to([".device-wrapper", ".floating-badge", ".card-copy", ".card-brand"], { scale: 0.9, y: -40, z: -200, autoAlpha: 0, ease: "power3.in", duration: 1, stagger: 0.05 })
@@ -155,7 +154,7 @@ export function CinematicHero({
       </div>
 
       <div className="closing-cta gsap-reveal absolute z-10 flex w-full flex-col items-center justify-center px-4 text-center">
-        <p className="label mb-5 text-cinema-accent">Available for select projects</p>
+        <p className="label mb-5 text-cinema-accent">Available for engineering projects</p>
         <h2 className="text-silver mb-6 max-w-5xl text-4xl font-bold tracking-tight md:text-6xl lg:text-7xl">{ctaHeading}</h2>
         <p className="mb-10 max-w-xl text-lg font-light leading-relaxed text-cinema-muted md:text-xl">{ctaDescription}</p>
         <div className="flex flex-col gap-4 sm:flex-row">
@@ -163,7 +162,7 @@ export function CinematicHero({
             Selected work <ArrowDownRight size={18} />
           </a>
           <a href="#contact" className="hero-button button-dark flex items-center justify-center gap-3 rounded-[1.25rem] px-7 py-4 font-bold focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cinema-accent">
-            Start a project <ArrowUpRight size={18} />
+            Let’s build <ArrowUpRight size={18} />
           </a>
         </div>
       </div>
@@ -196,9 +195,9 @@ export function CinematicHero({
                     </div>
                     <div className="portrait-detail absolute inset-x-0 bottom-0 z-10 p-7 md:p-8">
                       <div className="mb-5 h-px w-12 bg-cinema-accent/70" />
-                      <p className="label mb-2 text-cinema-accent">Designer · Developer</p>
+                      <p className="label mb-2 text-cinema-accent">Full Stack Developer</p>
                       <p className="font-display text-4xl leading-none text-cinema-text">Mohammad Nasim</p>
-                      <p className="mt-3 text-xs tracking-wide text-white/45">UI/UX · Frontend · Creative direction</p>
+                      <p className="mt-3 text-xs tracking-wide text-white/45">Frontend · Backend · APIs · Cloud</p>
                     </div>
                   </div>
                   <span className="portrait-detail absolute -right-8 top-1/2 hidden -translate-y-1/2 rotate-90 text-[9px] font-bold tracking-[.3em] text-white/25 uppercase lg:block">Based worldwide</span>
@@ -206,11 +205,11 @@ export function CinematicHero({
 
                 <div className="floating-badge glass-badge absolute top-5 left-[-20px] z-30 flex items-center gap-3 rounded-xl p-3 lg:top-12 lg:left-[-100px] lg:gap-4 lg:rounded-2xl lg:p-4">
                   <div className="flex h-9 w-9 items-center justify-center rounded-full border border-cinema-accent/30 bg-cinema-accent/10"><Flame size={17} className="text-cinema-accent" /></div>
-                  <div><p className="text-xs font-bold text-white lg:text-sm">5+ years of craft</p><p className="text-[10px] text-white/45 lg:text-xs">Built with intention</p></div>
+                  <div><p className="text-xs font-bold text-white lg:text-sm">5+ years building</p><p className="text-[10px] text-white/45 lg:text-xs">Shipping to production</p></div>
                 </div>
                 <div className="floating-badge glass-badge absolute right-[-20px] bottom-8 z-30 flex items-center gap-3 rounded-xl p-3 lg:right-[-100px] lg:bottom-16 lg:gap-4 lg:rounded-2xl lg:p-4">
                   <div className="flex h-9 w-9 items-center justify-center rounded-full border border-cinema-accent/30 bg-cinema-accent/10"><Handshake size={17} className="text-cinema-accent" /></div>
-                  <div><p className="text-xs font-bold text-white lg:text-sm">{metricValue}+ {metricLabel}</p><p className="text-[10px] text-white/45 lg:text-xs">Open to collaborate</p></div>
+                  <div><p className="text-xs font-bold text-white lg:text-sm">{metricValue}+ {metricLabel}</p><p className="text-[10px] text-white/45 lg:text-xs">End-to-end delivery</p></div>
                 </div>
               </div>
             </div>

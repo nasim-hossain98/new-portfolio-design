@@ -253,7 +253,7 @@ export const CTASection = () => {
                 }}
                 className="font-display text-5xl font-light leading-[1.1] text-cinema-text md:text-6xl lg:text-7xl"
               >
-                <span className="block">Let&apos;s make your</span>
+                <span className="block">Let&apos;s build your</span>
                 <span
                   className="block font-serif italic"
                   style={{
@@ -264,7 +264,7 @@ export const CTASection = () => {
                     backgroundClip: "text",
                   }}
                 >
-                  Website shine
+                  next product
                 </span>
               </motion.h2>
 
@@ -306,8 +306,8 @@ export const CTASection = () => {
                 transition={{ duration: 0.6, delay: 0.25 }}
                 className="mx-auto mt-6 max-w-md text-sm leading-relaxed text-cinema-muted"
               >
-                Premium web design, Webflow, and SEO services to help your
-                business stand out.
+                Full stack development for products that need to ship — React
+                frontends, APIs, databases, and deployment.
               </motion.p>
 
               {/* ── CTA Button ── */}

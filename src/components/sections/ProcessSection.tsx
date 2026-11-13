@@ -243,7 +243,7 @@ export function ProcessSection() {
             className="flex flex-col gap-6 md:col-span-4 md:items-end"
           >
             <p className="max-w-sm text-sm leading-7 text-cinema-muted md:text-right">
-              A transparent five-step journey that transforms strategy into a distinctive, high-performing digital experience.
+              A transparent five-step journey that turns requirements into a reliable, production-ready full stack application.
             </p>
             <a
               href="#process-steps"

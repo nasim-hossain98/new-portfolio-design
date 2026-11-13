@@ -75,7 +75,7 @@ export function Footer() {
             }}
             className="mt-4 max-w-sm text-2xl font-normal leading-snug text-cinema-text"
           >
-            Designing websites that feel like your brand — and perform like a machine.
+            Building web applications that scale — from the first commit to production.
           </motion.h3>
 
           <motion.div
@@ -183,7 +183,7 @@ export function Footer() {
           © {year} {personalInfo.name}. All rights reserved.
         </p>
         <p className="label text-cinema-muted">
-          Designed &amp; built with <span className="text-cinema-accent">precision</span>
+          Built &amp; shipped with <span className="text-cinema-accent">precision</span>
         </p>
       </div>
     </footer>

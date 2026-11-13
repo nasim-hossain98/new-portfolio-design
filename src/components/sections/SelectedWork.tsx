@@ -148,8 +148,8 @@ export function SelectedWork() {
             transition={{ duration: 0.8, delay: 0.15, ease: "easeOut" }}
           >
             <p className="max-w-sm text-sm leading-7 text-cinema-muted md:text-right">
-              A curated collection of digital experiences where clear strategy,
-              expressive design, and thoughtful motion meet.
+              A curated collection of full-stack builds where clean architecture,
+              solid APIs, and polished interfaces meet.
             </p>
             <a
               href="#work-grid"

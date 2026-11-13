@@ -64,7 +64,7 @@ export const ALL_WORKS: WorkEntry[] = [
     category: "AI Product",
     description:
       "An assistant interface that turns a model's raw output into something people can actually read, trust and act on.",
-    tags: ["AI", "Product Design", "Interface"],
+    tags: ["AI", "Full Stack", "Interface"],
     image:
       "https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=1200&q=80",
     accent: "125, 211, 252",
